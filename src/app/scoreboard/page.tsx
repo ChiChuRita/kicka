@@ -1,5 +1,7 @@
 import { db } from "@/db";
 
+export const revalidate = 0;
+
 export default async function Scoreboard() {
   const randoms = await db.query.users.findMany();
 
