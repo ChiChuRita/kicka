@@ -7,10 +7,18 @@ import { eq } from "drizzle-orm";
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET!,
   events: {
-    createUser: async ({ user }) => {
-      await db
-        .insert(users)
-        .values({ email: "ra.singh069@gmail.com", name: "rahul", elo: 1500 });
+    signIn: async (login) => {
+      const user = await db.query.users.findFirst({
+        where: eq(users.email, login.user.email || ""),
+      });
+
+      if (user) return;
+
+      await db.insert(users).values({
+        email: login.user.email!,
+        name: login.user.name!,
+        image: login.user.image,
+      });
     },
   },
   providers: [
