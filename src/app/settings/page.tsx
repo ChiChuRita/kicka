@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { Protect } from "../Protect";
+import { useProtect } from "../protect";
 
 export default function Settings() {
-  return Protect(
+  const session = useProtect();
+
+  return (
     <main className="">
       <h1>Settings</h1>
       <Link href="/api/auth/signout">Logout</Link>
