@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Inter } from "next/font/google";
 
 import type { Metadata } from "next";
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   description: "HPI Kicka",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <main>{children}</main>
         <nav>
           <Link href="/scoreboard">Scoreboard</Link>
           <Link href="/">Home</Link>
