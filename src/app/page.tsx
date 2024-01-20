@@ -1,3 +1,4 @@
+import { addRandomShit } from "@/actions";
 import { useProtect } from "./protect";
 
 export default async function Home() {
