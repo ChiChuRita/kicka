@@ -7,8 +7,8 @@ export default async function Scoreboard() {
     <main className="">
       <h1>Scoreboard</h1>
       <code className="flex flex-col">
-        {randoms.map((r) => (
-          <div className="flex flex-row">
+        {randoms.map((r, i) => (
+          <div className="flex flex-row" key={i}>
             <img width={32} height={32} src={r.image || ""} />
             <span>{r.name}</span>
           </div>
