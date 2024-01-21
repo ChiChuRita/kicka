@@ -7,26 +7,35 @@ import { AuthOptions } from "next-auth";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
-  events: {
+  callbacks: {
     signIn: async (login) => {
       const user = await db.query.users.findFirst({
         where: eq(users.email, login.user.email || ""),
       });
 
-      if (user) return;
+      if (user) return true;
 
       await db.insert(users).values({
         email: login.user.email!,
         name: login.user.name!,
         image: login.user.image,
       });
+
+      return true;
     },
   },
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
+    GithubProvider(
+      process.env.NODE_ENV === "production"
+        ? {
+            clientId: process.env.GITHUB_ID!,
+            clientSecret: process.env.GITHUB_SECRET!,
+          }
+        : {
+            clientId: process.env.DEV_GITHUB_ID!,
+            clientSecret: process.env.DEV_GITHUB_SECRET!,
+          }
+    ),
   ],
   pages: {
     signIn: "/",
