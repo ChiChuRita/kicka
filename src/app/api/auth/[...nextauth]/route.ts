@@ -1,10 +1,10 @@
 import { users } from "@/db/schema";
 import { db } from "../../../../db";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { eq } from "drizzle-orm";
 
-const handler = NextAuth({
+export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
   events: {
     signIn: async (login) => {
@@ -27,6 +27,12 @@ const handler = NextAuth({
       clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
-});
+  pages: {
+    signIn: "/",
+    signOut: "/settings",
+  },
+} satisfies AuthOptions;
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

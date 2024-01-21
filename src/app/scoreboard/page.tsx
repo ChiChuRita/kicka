@@ -1,21 +1,13 @@
-import { db } from "@/db";
+"use client";
 
-export const revalidate = 0;
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default async function Scoreboard() {
-  const randoms = await db.query.users.findMany();
-
+export default function Scoreboard() {
   return (
     <main className="">
       <h1>Scoreboard</h1>
-      <code className="flex flex-col">
-        {randoms.map((r, i) => (
-          <div className="flex flex-row" key={i}>
-            <img width={32} height={32} src={r.image || ""} />
-            <span>{r.name}</span>
-          </div>
-        ))}
-      </code>
+      <code className="flex flex-col"></code>
     </main>
   );
 }
