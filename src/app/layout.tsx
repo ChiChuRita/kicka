@@ -28,7 +28,7 @@ export default async function RootLayout({
         )}
       >
         <NextAuthProvider>
-          <main className="flex max-w-full grow flex-col gap-5 px-6 pb-0 pt-12">
+          <main className="container flex max-w-full grow flex-col gap-5 p-8">
             {children}
           </main>
           <Navbar />
