@@ -1,15 +1,13 @@
-import Link from "next/link";
-
 import { Inter } from "next/font/google";
 
 import type { Metadata } from "next";
 
 import "./globals.css";
 import NextAuthProvider from "@/NextAuthProvider";
-import { cva } from "class-variance-authority";
-import Navbar from "@/components/ui/navbar";
+import { cn } from "@/lib/utils";
+import Navbar from "@/components/navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "HPI Kicka",
@@ -23,12 +21,17 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          inter.variable,
+        )}
+      >
         <NextAuthProvider>
-          <div className="flex flex-col max-w-2xl container bg-slate-50 h-screen">
-            <main className="flex grow max-w-full">{children}</main>
-            <Navbar />
-          </div>
+          <main className="flex max-w-full grow flex-col gap-5 px-6 pb-0 pt-12">
+            {children}
+          </main>
+          <Navbar />
         </NextAuthProvider>
       </body>
     </html>

@@ -1,9 +1,27 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 export default function Login() {
-  console.log(process.env.NODE_ENV);
-  return <Button onClick={() => signIn("github")}>Login with Github</Button>;
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Login</CardTitle>
+        <CardDescription>More login options coming soon...</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Button onClick={() => signIn("github")}>Login with Github</Button>
+      </CardContent>
+    </Card>
+  );
 }
