@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,11 +16,13 @@ export default function Login() {
     <Card>
       <CardHeader>
         <CardTitle>Login</CardTitle>
-        <CardDescription>More login options coming soon...</CardDescription>
       </CardHeader>
       <CardContent>
         <Button onClick={() => signIn("github")}>Login with Github</Button>
       </CardContent>
+      <CardFooter className="text-muted-foreground">
+        More login options coming soon...
+      </CardFooter>
     </Card>
   );
 }

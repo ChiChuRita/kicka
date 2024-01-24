@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-import GithubProvider from "next-auth/providers/github";
+import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { AuthOptions } from "next-auth";
 
 export const authOptions = {
@@ -13,15 +13,31 @@ export const authOptions = {
         where: eq(users.email, login.user.email || ""),
       });
 
+      if (user?.image !== login.user.image)
+        await db
+          .update(users)
+          .set({ image: login.user.image! })
+          .where(eq(users.email, login.user.email || ""));
+
       if (user) return true;
 
       await db.insert(users).values({
         email: login.user.email!,
         name: login.user.name!,
-        image: login.user.image,
+        image: login.user.image!,
       });
 
       return true;
+    },
+    session: async ({ session }) => {
+      return {
+        ...session,
+        user: {
+          name: session.user!.name!,
+          email: session.user!.email!,
+          image: session.user!.image!,
+        },
+      };
     },
   },
   providers: [
@@ -34,7 +50,7 @@ export const authOptions = {
         : {
             clientId: process.env.DEV_GITHUB_ID!,
             clientSecret: process.env.DEV_GITHUB_SECRET!,
-          }
+          },
     ),
   ],
   pages: {

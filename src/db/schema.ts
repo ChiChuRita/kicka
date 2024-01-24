@@ -3,7 +3,7 @@ import { pgTable, text, integer } from "drizzle-orm/pg-core";
 export const users = pgTable("users", {
   email: text("email").primaryKey(),
   name: text("name").notNull().unique(),
-  image: text("image"),
+  image: text("image").notNull(),
 });
 
 export const single = pgTable("single", {
@@ -33,4 +33,4 @@ export const duoMatches = pgTable("duo_matches", {
   winnerElo: integer("winner_elo").notNull(),
   loserElo: integer("loser_elo").notNull(),
   date: text("date").notNull(),
-}); 
+});
