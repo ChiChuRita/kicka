@@ -1,9 +1,9 @@
 import Login from "./login";
 import Dashboard from "./dashboard";
-import { getSession } from "@/lib/get-session";
+import { getUnsafeSession } from "@/lib/get-session";
 
 export default async function HomePage() {
-  const session = await getSession();
+  const session = await getUnsafeSession();
 
   return (
     <>

@@ -1,4 +1,3 @@
-import { getAllUsers, getUserByName } from "@/actions";
 import Game from "./game";
 import Hero from "./hero";
 

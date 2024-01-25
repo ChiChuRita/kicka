@@ -1,23 +1,11 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import UserSelect from "./user-select";
 
-export default function Duo() {
+export default function Single() {
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Duo</CardTitle>
-        <CardDescription>
-          Conquer the rankings with a friend in duo player mode!
-        </CardDescription>
-      </CardHeader>
-      <CardContent>UI for Duo games will follow...</CardContent>
-    </Card>
+    <div>
+      <UserSelect />
+    </div>
   );
 }

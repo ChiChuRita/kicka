@@ -9,3 +9,7 @@ export async function getSession() {
 
   return session;
 }
+
+export async function getUnsafeSession() {
+  return await getServerSession(authOptions);
+}

@@ -39,7 +39,7 @@ export default function UserSelect() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[300px] justify-between"
+          className="justify-between"
         >
           {value
             ? users.find((user) => user.name.toLowerCase() === value)?.name
@@ -47,7 +47,7 @@ export default function UserSelect() {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className="p-0">
         <Command>
           <CommandInput placeholder="Search user..." />
           <CommandEmpty>No user found.</CommandEmpty>
