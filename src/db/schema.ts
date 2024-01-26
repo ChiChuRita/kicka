@@ -6,6 +6,8 @@ export const users = pgTable("users", {
   image: text("image").notNull(),
 });
 
+export type User = typeof users.$inferSelect;
+
 export const single = pgTable("single", {
   elo: integer("elo").default(0).notNull(),
   user: text("user").references(() => users.email),

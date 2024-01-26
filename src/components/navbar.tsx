@@ -9,7 +9,7 @@ export default function Navbar() {
   const currentPath = usePathname();
 
   return (
-    <nav className="fixed bottom-0 flex w-full justify-center gap-5 rounded-t-3xl border-x border-t p-4">
+    <nav className="fixed bottom-0 flex w-full max-w-2xl justify-center gap-5 rounded-t-3xl border-x border-t bg-background p-5">
       <Link href="/scoreboard">
         <Button
           variant={currentPath === "/scoreboard" ? "destructive" : "secondary"}

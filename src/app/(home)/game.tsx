@@ -6,7 +6,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -17,6 +16,8 @@ import { Label } from "@radix-ui/react-label";
 import UserSelect from "./user-select";
 
 export default function Game() {
+  const [duo, setDuo] = React.useState(false);
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -26,16 +27,14 @@ export default function Game() {
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Play</DrawerTitle>
-          </DrawerHeader>
+          <DrawerHeader></DrawerHeader>
           <div className="flex flex-col gap-5 px-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <Label htmlFor="gamemode">Single</Label>
-              <Switch id="gamemode" />
+              <Switch onCheckedChange={setDuo} id="gamemode" />
               <Label htmlFor="gamemode">Duo</Label>
             </div>
-            <UserSelect />
+            {duo ? "duo" : "single"}
           </div>
           <DrawerFooter>
             <DrawerClose asChild>

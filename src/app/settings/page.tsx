@@ -1,11 +1,13 @@
 "use client";
-import ActionButtons from "./ActionButtons";
+import Info from "./info";
+import ActionSettings from "./account-settings";
 
 export default function Settings() {
   return (
     <>
       <h1>Settings</h1>
-      <ActionButtons />
+      <ActionSettings />
+      <Info />
     </>
   );
 }

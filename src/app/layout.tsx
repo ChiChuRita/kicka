@@ -6,6 +6,7 @@ import "./globals.css";
 import NextAuthProvider from "@/NextAuthProvider";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -23,12 +24,12 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "flex min-h-screen justify-center bg-background font-sans antialiased",
           inter.variable,
         )}
       >
         <NextAuthProvider>
-          <main className="container flex max-w-full grow flex-col gap-5 p-6">
+          <main className="container flex max-w-2xl grow flex-col gap-5 p-5">
             {children}
           </main>
           <Navbar />

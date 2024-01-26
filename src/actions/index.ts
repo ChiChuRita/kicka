@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { eq, ilike } from "drizzle-orm";
+import { eq, ilike, ne } from "drizzle-orm";
 import { users } from "@/db/schema";
 import { getServerSession } from "next-auth";
 
@@ -13,6 +13,14 @@ export async function deleteUser() {
 
 export async function getAllUsers() {
   return await db.query.users.findMany();
+}
+
+export async function getAllUsersExcept(exceptEmail?: string) {
+  if (!exceptEmail) return await getAllUsers();
+
+  return await db.query.users.findMany({
+    where: ne(users.email, exceptEmail),
+  });
 }
 
 export async function getUserByName(name: string) {

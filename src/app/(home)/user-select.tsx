@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -17,19 +16,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getAllUsers } from "@/actions";
+import { getAllUsersExcept } from "@/actions";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "@/db/schema";
+import { getSession } from "next-auth/react";
 
 export default function UserSelect() {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
-  const [users, setUsers] = React.useState<
-    Awaited<ReturnType<typeof getAllUsers>>
-  >([]);
+  const [value, setValue] = React.useState<User | null>();
+  const [users, setUsers] = React.useState<User[]>([]);
 
   React.useEffect(() => {
-    getAllUsers().then((users) => setUsers(users));
+    const getData = async () => {
+      const session = await getSession();
+      const users = await getAllUsersExcept(session?.user?.email || "");
+      setUsers(users);
+    };
+
+    getData().catch(console.error);
   }, []);
 
   return (
@@ -41,9 +46,16 @@ export default function UserSelect() {
           aria-expanded={open}
           className="justify-between"
         >
-          {value
-            ? users.find((user) => user.name.toLowerCase() === value)?.name
-            : "Select user"}
+          <div className="flex flex-row items-center">
+            <Avatar>
+              <AvatarImage
+                className="mr-2 h-4 w-4 rounded-full"
+                src={value?.image}
+              />
+              <AvatarFallback>{value?.name}</AvatarFallback>
+            </Avatar>
+            {value ? value.name : "Select user"}
+          </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -57,7 +69,13 @@ export default function UserSelect() {
                 key={user.name}
                 value={user.name}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                  setValue(
+                    currentValue === value?.name.toLowerCase()
+                      ? null
+                      : users.find(
+                          (user) => user.name.toLowerCase() === currentValue,
+                        ),
+                  );
                   setOpen(false);
                 }}
               >
