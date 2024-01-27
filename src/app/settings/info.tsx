@@ -1,3 +1,5 @@
+import { InfoIcon, Link } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { InfoIcon, Link } from "lucide-react";
 
 export default function Info() {
   return (

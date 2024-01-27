@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/drawer";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@radix-ui/react-label";
-import UserSelect from "./user-select";
+
+import Duo from "./duo";
+import Single from "./single";
 
 export default function Game() {
   const [duo, setDuo] = React.useState(false);
@@ -34,7 +36,7 @@ export default function Game() {
               <Switch onCheckedChange={setDuo} id="gamemode" />
               <Label htmlFor="gamemode">Duo</Label>
             </div>
-            {duo ? "duo" : "single"}
+            {duo ? <Single /> : <Duo />}
           </div>
           <DrawerFooter>
             <DrawerClose asChild>

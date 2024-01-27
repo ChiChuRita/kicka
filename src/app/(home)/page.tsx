@@ -1,7 +1,9 @@
-import Login from "./login";
-import Dashboard from "./dashboard";
-import { getUnsafeSession } from "@/lib/get-session";
 import Image from "next/image";
+
+import { getUnsafeSession } from "@/lib/get-session";
+
+import Dashboard from "./dashboard";
+import Login from "./login";
 
 export default async function HomePage() {
   const session = await getUnsafeSession();

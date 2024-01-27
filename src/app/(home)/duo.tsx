@@ -2,7 +2,7 @@
 
 import UserSelect from "./user-select";
 
-export default function Single() {
+export default function Duo() {
   return (
     <div>
       <UserSelect />

@@ -1,6 +1,6 @@
 "use client";
-import Info from "./info";
 import ActionSettings from "./account-settings";
+import Info from "./info";
 
 export default function Settings() {
   return (

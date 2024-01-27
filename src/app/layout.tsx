@@ -1,12 +1,13 @@
-import { Inter } from "next/font/google";
+import './globals.css';
+
+import { Inter } from 'next/font/google';
+import Image from 'next/image';
+
+import Navbar from '@/components/navbar';
+import { cn } from '@/lib/utils';
+import NextAuthProvider from '@/NextAuthProvider';
 
 import type { Metadata } from "next";
-
-import "./globals.css";
-import NextAuthProvider from "@/NextAuthProvider";
-import { cn } from "@/lib/utils";
-import Navbar from "@/components/navbar";
-import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
