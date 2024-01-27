@@ -20,22 +20,22 @@ import { getAllUsersExcept } from "@/actions";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/db/schema";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 export default function UserSelect() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<User | null>();
   const [users, setUsers] = React.useState<User[]>([]);
+  const { data: session, status } = useSession();
 
   React.useEffect(() => {
     const getData = async () => {
-      const session = await getSession();
       const users = await getAllUsersExcept(session?.user?.email || "");
       setUsers(users);
     };
 
     getData().catch(console.error);
-  }, []);
+  }, [status]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -44,7 +44,7 @@ export default function UserSelect() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between"
+          className="w-full justify-between "
         >
           <div className="flex flex-row items-center">
             <Avatar>

@@ -31,12 +31,12 @@ export default function Game() {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader></DrawerHeader>
           <div className="flex flex-col gap-5 px-4">
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center  space-x-2">
               <Label htmlFor="gamemode">Single</Label>
               <Switch onCheckedChange={setDuo} id="gamemode" />
               <Label htmlFor="gamemode">Duo</Label>
             </div>
-            {duo ? <Single /> : <Duo />}
+            {duo ? <Duo /> : <Single />}
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
