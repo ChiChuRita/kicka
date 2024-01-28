@@ -1,8 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -11,9 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import UserSelect from "./user-select";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
+import UserSelect from "./user-select";
+import { useSession } from "next-auth/react";
 
 export function User() {
   const { data: session, status } = useSession();

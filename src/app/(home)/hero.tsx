@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { getSession } from "@/lib/get-session";
 
 export default async function Hero() {

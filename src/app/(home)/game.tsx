@@ -1,7 +1,7 @@
 "use client";
+
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -11,11 +11,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@radix-ui/react-label";
 
+import { Button } from "@/components/ui/button";
 import Duo from "./duo";
+import { Label } from "@radix-ui/react-label";
 import Single from "./single";
+import { Switch } from "@/components/ui/switch";
 
 export default function Game() {
   const [duo, setDuo] = React.useState(false);

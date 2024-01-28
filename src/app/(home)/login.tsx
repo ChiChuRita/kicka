@@ -1,9 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import Image from "next/image";
-
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,7 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { Button } from "@/components/ui/button";
 import GithubIcon from "../../../public/github-mark-white.svg";
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   return (

@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Command,
   CommandEmpty,
@@ -16,17 +15,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getAllUsersExcept } from "@/actions";
+
 import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { ChevronsUpDown } from "lucide-react";
 import { User } from "@/db/schema";
-import { getSession, useSession } from "next-auth/react";
+import { getAllUsersExcept } from "@/actions";
+import { useSession } from "next-auth/react";
 
 export default function UserSelect() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<User | null>();
   const [users, setUsers] = React.useState<User[]>([]);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   React.useEffect(() => {
     const getData = async () => {
@@ -35,7 +36,7 @@ export default function UserSelect() {
     };
 
     getData().catch(console.error);
-  }, [status]);
+  }, [session?.user?.email]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
