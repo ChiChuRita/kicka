@@ -22,6 +22,9 @@ import { useForm } from "@tanstack/react-form";
 import { Input } from "@kicka/components/ui/input";
 import { z } from "zod";
 import { DrawerClose } from "@kicka/components/ui/drawer";
+import { Minus, Plus } from "lucide-react";
+
+const MAX_NUM = 30;
 
 export function User() {
   const { data: session, status } = useSession();
@@ -43,9 +46,7 @@ export default function Single() {
       num2: 0,
     },
 
-    onSubmit: (values) => {
-      console.log("TROLL");
-    },
+    onSubmit: (values) => {},
 
     validatorAdapter: zodValidator,
   });
@@ -68,64 +69,88 @@ export default function Single() {
             <div className="flex flex-row justify-between gap-2">
               <Field
                 name="num1"
-                validators={{ onChange: z.number().min(0).max(30) }}
+                validators={{ onChange: z.number().min(0).max(MAX_NUM) }}
                 children={(field) => (
                   <div className="flex flex-row">
                     <Button
                       variant="outline"
-                      className="h-10 w-10 rounded-none rounded-l border-r-0"
-                      onClick={() => field.setValue((v) => v - 1)}
+                      className="h-10 w-10 rounded-none rounded-l border-r-0 p-3"
+                      onClick={() => field.setValue((v) => (v > 0 ? v - 1 : v))}
                     >
-                      -1
+                      <Minus />
                     </Button>
                     <Input
-                      className="flex w-12 rounded-none text-center"
+                      className="z-10 flex w-12 rounded-none text-center hover:outline-none"
                       type="number"
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(Number.parseInt(e.target.value))
-                      }
+                      onChange={(e) => {
+                        try {
+                          let num = Number.parseInt(e.target.value);
+                          if (num < 0) {
+                            num = 0;
+                          } else if (num > MAX_NUM) {
+                            num = MAX_NUM;
+                          }
+                          field.handleChange(num);
+                        } catch {
+                          field.handleChange(0);
+                        }
+                      }}
                     />
                     <Button
-                      className="h-10 w-10 rounded-none rounded-r border-l-0"
+                      className="h-10 w-10 rounded-none rounded-r border-l-0 p-3"
                       variant="outline"
-                      onClick={() => field.setValue((v) => v + 1)}
+                      onClick={() =>
+                        field.setValue((v) => (v < MAX_NUM ? v + 1 : v))
+                      }
                     >
-                      +1
+                      <Plus />
                     </Button>
                   </div>
                 )}
               />
               <Field
                 name="num2"
-                validators={{ onChange: z.number().min(0).max(30) }}
+                validators={{ onChange: z.number().min(0).max(MAX_NUM) }}
                 children={(field) => (
                   <div className="flex flex-row">
                     <Button
                       variant="outline"
-                      className="h-10 w-10 rounded-none rounded-l border-r-0"
-                      onClick={() => field.setValue((v) => v - 1)}
+                      className="h-10 w-10 rounded-none rounded-l border-r-0 p-3 "
+                      onClick={() => field.setValue((v) => (v > 0 ? v - 1 : v))}
                     >
-                      -1
+                      <Minus />
                     </Button>
                     <Input
-                      className="flex w-12 rounded-none text-center"
+                      className="z-10 flex w-12 rounded-none text-center"
                       type="number"
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(Number.parseInt(e.target.value))
-                      }
+                      onChange={(e) => {
+                        try {
+                          let num = Number.parseInt(e.target.value);
+                          if (num < 0) {
+                            num = 0;
+                          } else if (num > MAX_NUM) {
+                            num = MAX_NUM;
+                          }
+                          field.handleChange(num);
+                        } catch {
+                          field.handleChange(0);
+                        }
+                      }}
                     />
                     <Button
-                      className="h-10 w-10 rounded-none rounded-r border-l-0"
+                      className="h-10 w-10 rounded-none rounded-r border-l-0 p-3"
                       variant="outline"
-                      onClick={() => field.setValue((v) => v + 1)}
+                      onClick={() =>
+                        field.setValue((v) => (v < MAX_NUM ? v + 1 : v))
+                      }
                     >
-                      +1
+                      <Plus />
                     </Button>
                   </div>
                 )}
@@ -133,7 +158,7 @@ export default function Single() {
             </div>
             <User />
             <DrawerClose asChild>
-              <Button>Draft</Button>
+              <Button type="submit">Draft</Button>
             </DrawerClose>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
