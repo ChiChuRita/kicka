@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@kicka/components/ui/avatar";
+
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ import {
 import { Button } from "@kicka/components/ui/button";
 import UserSelect from "./user-select";
 import { useSession } from "next-auth/react";
+import NumberInput from "./number-input";
 
 export function User() {
   const { data: session, status } = useSession();
@@ -39,6 +41,8 @@ export default function Single() {
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <UserSelect />
+        <NumberInput />
+        <NumberInput />
         <User />
       </CardContent>
     </Card>

@@ -1,4 +1,4 @@
-import Game from "./game";
+import Game from "./(game)/game";
 import Hero from "./hero";
 
 export default async function Dashboard() {
