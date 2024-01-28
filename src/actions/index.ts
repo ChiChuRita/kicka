@@ -35,3 +35,8 @@ export async function getUserByEmail(email: string) {
     where: ilike(users.email, `${email}%`),
   });
 }
+
+export async function draftSoloGame(
+  player1Email: string,
+  player2Email: string,
+) {}

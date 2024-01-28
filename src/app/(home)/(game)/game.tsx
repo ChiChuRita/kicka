@@ -15,7 +15,7 @@ import {
 import { Button } from "@kicka/components/ui/button";
 import Duo from "./duo";
 import { Label } from "@kicka/components/ui/label";
-import Single from "./single";
+import Solo from "./solo";
 import { Switch } from "@kicka/components/ui/switch";
 
 export default function Game() {
@@ -33,11 +33,11 @@ export default function Game() {
           <DrawerHeader />
           <div className="flex flex-col gap-5 px-4">
             <div className="flex items-center  space-x-2">
-              <Label htmlFor="gamemode">Single</Label>
+              <Label htmlFor="gamemode">Solo</Label>
               <Switch onCheckedChange={setDuo} id="gamemode" />
               <Label htmlFor="gamemode">Duo</Label>
             </div>
-            {duo ? <Duo /> : <Single />}
+            {duo ? <Duo /> : <Solo />}
           </div>
           <DrawerFooter />
         </div>

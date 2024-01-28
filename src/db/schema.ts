@@ -8,7 +8,7 @@ export const users = pgTable("users", {
 
 export type User = typeof users.$inferSelect;
 
-export const single = pgTable("single", {
+export const solo = pgTable("solo", {
   elo: integer("elo").default(0).notNull(),
   user: text("user").references(() => users.email),
 });
@@ -19,7 +19,7 @@ export const duo = pgTable("duo", {
   user2: text("user_2").references(() => users.email),
 });
 
-export const singleMatches = pgTable("single_matches", {
+export const soloMatches = pgTable("solo_matches", {
   id: integer("id").primaryKey(),
   winnerElo: integer("winner_elo").notNull(),
   loserElo: integer("loser_elo").notNull(),

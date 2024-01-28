@@ -30,7 +30,7 @@ export function User() {
   const { data: session, status } = useSession();
 
   return status === "authenticated" ? (
-    <Button variant="outline" className="justify-start">
+    <Button variant="outline" className="w-full justify-start">
       <Avatar className="mr-2 h-4 w-4">
         <AvatarImage src={session.user?.image!} />
         <AvatarFallback>{session.user?.name}</AvatarFallback>
@@ -53,7 +53,7 @@ export default function Single() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Single</CardTitle>
+        <CardTitle>Solo</CardTitle>
         <CardDescription>Play against one opponent</CardDescription>
       </CardHeader>
       <CardContent>
