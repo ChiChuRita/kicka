@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+/** @kickatype {import('next').NextConfig} */
 const nextConfig = {};
 
 export default nextConfig;

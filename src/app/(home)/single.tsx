@@ -1,16 +1,19 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@kicka/components/ui/avatar";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@kicka/components/ui/card";
 
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { Button } from "@kicka/components/ui/button";
 import UserSelect from "./user-select";
 import { useSession } from "next-auth/react";
 

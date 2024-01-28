@@ -1,13 +1,17 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@kicka/components/ui/avatar";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@kicka/components/ui/card";
 
-import { getSession } from "@/lib/get-session";
+import { getSession } from "@kicka/lib/get-session";
 
 export default async function Hero() {
   const session = await getSession();

@@ -1,13 +1,13 @@
-import { InfoIcon, Link } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@kicka/components/ui/card";
+import { InfoIcon, Link } from "lucide-react";
+
+import { Button } from "@kicka/components/ui/button";
 
 export default function Info() {
   return (
@@ -20,10 +20,10 @@ export default function Info() {
         <code className="flex flex-row gap-1">
           Feedback:
           <a
-            href="mailto:rahul.singh@student.hpi.de"
+            href="mailto:rahul.singh@kickastudent.hpi.de"
             className="text-primary underline-offset-4 hover:cursor-pointer hover:underline"
           >
-            rahul.singh@student.hpi.de
+            rahul.singh@kickastudent.hpi.de
           </a>
         </code>
       </CardContent>

@@ -6,9 +6,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@kicka/components/ui/card";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@kicka/components/ui/button";
 import GithubIcon from "../../../public/github-mark-white.svg";
 import Image from "next/image";
 import { signIn } from "next-auth/react";

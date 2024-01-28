@@ -10,13 +10,13 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "@kicka/components/ui/drawer";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@kicka/components/ui/button";
 import Duo from "./duo";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@kicka/components/ui/label";
 import Single from "./single";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@kicka/components/ui/switch";
 
 export default function Game() {
   const [duo, setDuo] = React.useState(false);

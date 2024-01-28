@@ -8,17 +8,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@kicka/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@kicka/components/ui/card";
 
-import { Button } from "@/components/ui/button";
-import { deleteUser } from "@/actions";
+import { Button } from "@kicka/components/ui/button";
+import { deleteUser } from "@kicka/actions";
 import { signOut } from "next-auth/react";
 
 export default function AccountSettings() {

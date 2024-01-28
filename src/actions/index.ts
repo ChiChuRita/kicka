@@ -1,10 +1,10 @@
 "use server";
 
 import { eq, ilike, ne } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 
-import { db } from "@/db";
-import { users } from "@/db/schema";
+import { db } from "@kicka/db";
+import { getServerSession } from "next-auth";
+import { users } from "@kicka/db/schema";
 
 export async function deleteUser() {
   const session = await getServerSession();

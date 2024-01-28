@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { AuthOptions } from "next-auth";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 
-import { db } from "@/db";
-import { users } from "@/db/schema";
+import { db } from "@kicka/db";
+import { users } from "@kicka/db/schema";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,

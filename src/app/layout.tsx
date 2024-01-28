@@ -1,13 +1,11 @@
-import './globals.css';
+import "./globals.css";
 
-import { Inter } from 'next/font/google';
-import Image from 'next/image';
-
-import Navbar from '@/components/navbar';
-import { cn } from '@/lib/utils';
-import NextAuthProvider from '@/NextAuthProvider';
-
+import Image from "next/image";
+import { Inter } from "next/font/google";
 import type { Metadata } from "next";
+import Navbar from "@kicka/components/navbar";
+import NextAuthProvider from "@kicka/NextAuthProvider";
+import { cn } from "@kicka/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
