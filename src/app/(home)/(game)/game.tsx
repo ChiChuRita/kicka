@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import {
   Drawer,
@@ -19,7 +19,7 @@ import Single from "./single";
 import { Switch } from "@kicka/components/ui/switch";
 
 export default function Game() {
-  const [duo, setDuo] = React.useState(false);
+  const [duo, setDuo] = useState(false);
 
   return (
     <Drawer>
@@ -39,14 +39,7 @@ export default function Game() {
             </div>
             {duo ? <Duo /> : <Single />}
           </div>
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button>Draft</Button>
-            </DrawerClose>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+          <DrawerFooter />
         </div>
       </DrawerContent>
     </Drawer>

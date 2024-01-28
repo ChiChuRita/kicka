@@ -17,7 +17,7 @@ export default function Info() {
       </CardHeader>
       <CardContent className="flex flex-col">
         <code>Version: 0.0.0-alpha</code>
-        <code className="flex flex-row gap-1">
+        <code className="flex flex-row flex-wrap gap-1">
           Feedback:
           <a
             href="mailto:rahul.singh@kickastudent.hpi.de"
