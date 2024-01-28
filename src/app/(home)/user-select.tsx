@@ -2,25 +2,28 @@
 
 import * as React from "react";
 
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@kicka/components/ui/avatar";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from "@kicka/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@kicka/components/ui/popover";
 
-import { Avatar } from "@radix-ui/react-avatar";
-import { Button } from "@/components/ui/button";
+import { Button } from "@kicka/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { User } from "@/db/schema";
-import { getAllUsersExcept } from "@/actions";
+import { User } from "@kicka/db/schema";
+import { getAllUsersExcept } from "@kicka/actions";
 import { useSession } from "next-auth/react";
 
 export default function UserSelect() {
@@ -48,13 +51,12 @@ export default function UserSelect() {
           className="w-full justify-between "
         >
           <div className="flex flex-row items-center">
-            <Avatar>
-              <AvatarImage
-                className="mr-2 h-4 w-4 rounded-full"
-                src={value?.image}
-              />
-              <AvatarFallback>{value?.name}</AvatarFallback>
-            </Avatar>
+            {value && (
+              <Avatar className="mr-2 h-4 w-4">
+                <AvatarImage src={value.image} />
+                <AvatarFallback>{value.name}</AvatarFallback>
+              </Avatar>
+            )}
             {value ? value.name : "Select user"}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -80,11 +82,8 @@ export default function UserSelect() {
                   setOpen(false);
                 }}
               >
-                <Avatar>
-                  <AvatarImage
-                    className="mr-2 h-4 w-4 rounded-full"
-                    src={user.image}
-                  />
+                <Avatar className="mr-2 h-4 w-4">
+                  <AvatarImage src={user.image} />
                   <AvatarFallback>{user.name}</AvatarFallback>
                 </Avatar>
                 {user.name}
