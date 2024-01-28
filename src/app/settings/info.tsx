@@ -21,7 +21,7 @@ export default function Info() {
           Feedback:
           <a
             href="mailto:rahul.singh@kickastudent.hpi.de"
-            className="text-primary underline-offset-4 hover:cursor-pointer hover:underline"
+            className="text-wrap text-primary underline-offset-4 hover:cursor-pointer hover:underline"
           >
             rahul.singh@kickastudent.hpi.de
           </a>

@@ -30,7 +30,7 @@ export default function Game() {
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader></DrawerHeader>
+          <DrawerHeader />
           <div className="flex flex-col gap-5 px-4">
             <div className="flex items-center  space-x-2">
               <Label htmlFor="gamemode">Single</Label>
