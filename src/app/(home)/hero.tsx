@@ -1,3 +1,4 @@
+import { getElo } from "@kicka/actions";
 import {
   Avatar,
   AvatarFallback,
@@ -27,6 +28,7 @@ export default async function Hero() {
           <AvatarImage src={session.user.image} />
           <AvatarFallback>{session.user.name}</AvatarFallback>
         </Avatar>
+        Elo: {await getElo(session.user.email)}
       </CardContent>
     </Card>
   );

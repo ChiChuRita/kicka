@@ -23,6 +23,7 @@ import { Input } from "@kicka/components/ui/input";
 import { z } from "zod";
 import { DrawerClose } from "@kicka/components/ui/drawer";
 import { Minus, Plus } from "lucide-react";
+import { draftSoloGame } from "@kicka/actions";
 
 const MAX_NUM = 30;
 
@@ -40,13 +41,22 @@ export function User() {
   ) : null;
 }
 export default function Single() {
+  const { data: session, status } = useSession();
+
   const { Field, Provider, handleSubmit } = useForm({
     defaultValues: {
       num1: 0,
       num2: 0,
     },
 
-    onSubmit: (values) => {},
+    onSubmit: ({ value }) => {
+      draftSoloGame(
+        session?.user?.email!,
+        session?.user?.name!,
+        value.num1,
+        value.num2,
+      );
+    },
 
     validatorAdapter: zodValidator,
   });

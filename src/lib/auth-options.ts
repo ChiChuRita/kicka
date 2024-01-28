@@ -3,7 +3,7 @@ import { AuthOptions } from "next-auth";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 
 import { db } from "@kicka/db";
-import { users } from "@kicka/db/schema";
+import { solo, users } from "@kicka/db/schema";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -25,6 +25,11 @@ export const authOptions = {
         email: login.user.email!,
         name: login.user.name!,
         image: login.user.image!,
+      });
+
+      await db.insert(solo).values({
+        user: login.user.email!,
+        elo: 1000,
       });
 
       return true;
