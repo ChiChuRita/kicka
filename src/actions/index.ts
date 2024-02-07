@@ -1,70 +1,81 @@
 "use server";
 
 import { eq, ilike, ne } from "drizzle-orm";
+import { solo, users } from "@kicka/db/schema";
 
+import { MAX_SCORE } from "@kicka/lib/constants";
+import { action } from "@kicka/lib/safe-action";
 import { db } from "@kicka/db";
-import { getServerSession } from "next-auth";
-import { users, solo } from "@kicka/db/schema";
+import { getSession } from "@kicka/lib/get-session";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export async function deleteUser() {
-  const session = await getServerSession();
-  if (!session) return;
-  await db.delete(users).where(eq(users.email, session.user?.email!)).execute();
+  const session = await getSession();
+  await db.delete(users).where(eq(users.email, session.user?.email!));
 }
 
 export async function getAllUsers() {
-  return await db.query.users.findMany().execute();
+  return await db.query.users.findMany();
 }
 
-export async function getAllUsersExcept(exceptEmail?: string) {
-  if (!exceptEmail) return await getAllUsers();
-
-  return await db.query.users
-    .findMany({
-      where: ne(users.email, exceptEmail),
-    })
-    .execute();
+export async function getAllOtherUsers() {
+  const session = await getSession();
+  return await db.query.users.findMany({
+    where: ne(users.email, session.user.email),
+  });
 }
 
 export async function getUserByName(name: string) {
-  return await db.query.users
-    .findMany({
-      where: ilike(users.name, `${name}%`),
-    })
-    .execute();
+  return await db.query.users.findMany({
+    where: ilike(users.name, `${name}%`),
+  });
 }
 
 export async function getUserByEmail(email: string) {
-  return await db.query.users
-    .findMany({
-      where: ilike(users.email, `${email}%`),
-    })
-    .execute();
-}
-
-export async function draftSoloGame(
-  player1Email: string,
-  player2Email: string,
-  score1: number,
-  score2: number,
-) {
-  const player1 = await db.query.solo.findFirst({
-    where: eq(solo.user, player1Email),
+  return await db.query.users.findMany({
+    where: ilike(users.email, `${email}%`),
   });
-
-  await db
-    .update(solo)
-    .set({
-      elo: player1!.elo + score1,
-    })
-    .where(eq(solo.user, player1Email))
-    .execute();
 }
 
-export async function getElo(user: string) {
-  const player = await db.query.solo.findFirst({
+const draftSoloGameSchema = z.object({
+  opponent: z.string().email(),
+  myScore: z.number().int().min(0).max(MAX_SCORE),
+  opponentScore: z.number().int().min(0).max(MAX_SCORE),
+});
+
+export const draftSoloGame = action(
+  draftSoloGameSchema,
+  async ({ opponent, myScore, opponentScore }) => {
+    const session = await getSession();
+    const player1 = await db.query.solo.findFirst({
+      where: eq(solo.user, session.user.email),
+    });
+    const player2 = await db.query.solo.findFirst({
+      where: eq(solo.user, opponent),
+    });
+
+    if (player1 && player2) {
+      if (myScore > opponentScore) {
+        await db
+          .update(solo)
+          .set({ wins: player1.wins + 1, games: player1.games + 1 })
+          .where(eq(solo.user, player1.user));
+      }
+    }
+    revalidatePath("/");
+    revalidatePath("/rankings");
+  },
+);
+
+export async function getGames(user: string) {
+  const games = await db.query.solo.findFirst({
     where: eq(solo.user, user),
+    columns: {
+      games: true,
+      wins: true,
+    },
   });
 
-  return player ? player.elo : 0;
+  return games;
 }

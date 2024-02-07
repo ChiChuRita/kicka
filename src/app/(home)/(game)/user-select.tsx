@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import {
   Avatar,
   AvatarFallback,
@@ -19,27 +17,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@kicka/components/ui/popover";
+import { UseControllerProps, useController } from "react-hook-form";
 
 import { Button } from "@kicka/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
+import { FormSchema } from "./solo";
 import { User } from "@kicka/db/schema";
-import { getAllUsersExcept } from "@kicka/actions";
-import { useSession } from "next-auth/react";
+import { getAllOtherUsers } from "@kicka/actions";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-export default function UserSelect() {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<User | null>();
-  const [users, setUsers] = React.useState<User[]>([]);
-  const { data: session } = useSession();
+export default function UserSelect(props: UseControllerProps<FormSchema>) {
+  const { field, fieldState } = useController(props);
 
-  React.useEffect(() => {
-    const getData = async () => {
-      const users = await getAllUsersExcept(session?.user?.email || "");
-      setUsers(users);
-    };
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<User>();
 
-    getData().catch(console.error);
-  }, [session?.user?.email]);
+  const { data } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getAllOtherUsers(),
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -48,7 +45,7 @@ export default function UserSelect() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between "
+          className="w-full justify-between"
         >
           <div className="flex flex-row items-center">
             {value && (
@@ -67,28 +64,30 @@ export default function UserSelect() {
           <CommandInput placeholder="Search user..." />
           <CommandEmpty>No user found.</CommandEmpty>
           <CommandGroup>
-            {users.map((user) => (
-              <CommandItem
-                key={user.name}
-                value={user.name}
-                onSelect={(currentValue) => {
-                  setValue(
-                    currentValue === value?.name.toLowerCase()
-                      ? null
-                      : users.find(
-                          (user) => user.name.toLowerCase() === currentValue,
-                        ),
-                  );
-                  setOpen(false);
-                }}
-              >
-                <Avatar className="mr-2 h-4 w-4">
-                  <AvatarImage src={user.image} />
-                  <AvatarFallback>{user.name}</AvatarFallback>
-                </Avatar>
-                {user.name}
-              </CommandItem>
-            ))}
+            {data &&
+              data.map((user) => (
+                <CommandItem
+                  key={user.name}
+                  value={user.name}
+                  onSelect={(currentValue) => {
+                    field.onChange(user.email);
+                    setValue(
+                      currentValue === value?.name.toLowerCase()
+                        ? undefined
+                        : data.find(
+                            (user) => user.name.toLowerCase() === currentValue,
+                          ),
+                    );
+                    setOpen(false);
+                  }}
+                >
+                  <Avatar className="mr-2 h-4 w-4">
+                    <AvatarImage src={user.image} />
+                    <AvatarFallback>{user.name}</AvatarFallback>
+                  </Avatar>
+                  {user.name}
+                </CommandItem>
+              ))}
           </CommandGroup>
         </Command>
       </PopoverContent>

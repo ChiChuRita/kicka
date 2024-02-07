@@ -1,4 +1,3 @@
-import { getElo } from "@kicka/actions";
 import {
   Avatar,
   AvatarFallback,
@@ -12,6 +11,7 @@ import {
   CardTitle,
 } from "@kicka/components/ui/card";
 
+import { getGames } from "@kicka/actions";
 import { getSession } from "@kicka/lib/get-session";
 
 export default async function Hero() {
@@ -20,7 +20,7 @@ export default async function Hero() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Welcome back, {session.user.name}</CardTitle>
+        <CardTitle>Welcome {session.user.name}!</CardTitle>
         <CardDescription>Enjoy the game 😉</CardDescription>
       </CardHeader>
       <CardContent>
@@ -28,7 +28,7 @@ export default async function Hero() {
           <AvatarImage src={session.user.image} />
           <AvatarFallback>{session.user.name}</AvatarFallback>
         </Avatar>
-        Elo: {await getElo(session.user.email)}
+        {JSON.stringify(await getGames(session.user.email))}
       </CardContent>
     </Card>
   );

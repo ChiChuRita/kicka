@@ -9,9 +9,9 @@ export default function Navbar() {
 
   return (
     <nav className="fixed bottom-0 flex w-full max-w-2xl justify-center gap-5 rounded-t-3xl border-x border-t bg-background p-5">
-      <Link href="/scoreboard">
+      <Link href="/rankings">
         <Button
-          variant={currentPath === "/scoreboard" ? "destructive" : "secondary"}
+          variant={currentPath === "/rankings" ? "destructive" : "secondary"}
         >
           Scoreboard
         </Button>
