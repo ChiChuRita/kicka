@@ -5,9 +5,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@kicka/components/ui/avatar";
-import { getAllUsers, one } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
+import { getAllUsers } from "@kicka/actions";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
