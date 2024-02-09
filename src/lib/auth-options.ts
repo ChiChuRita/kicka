@@ -4,6 +4,7 @@ import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 
 import { db } from "@kicka/db";
 import { solo, users } from "@kicka/db/schema";
+import { initialSoloRating } from "./skill";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -16,7 +17,7 @@ export const authOptions = {
       if (user?.image !== login.user.image)
         await db
           .update(users)
-          .set({ image: login.user.image! })
+          .set({ image: login.user.image!, lastOnlineAt: new Date() })
           .where(eq(users.email, login.user.email || ""));
 
       if (user) return true;
@@ -25,11 +26,17 @@ export const authOptions = {
         email: login.user.email!,
         name: login.user.name!,
         image: login.user.image!,
+        createdAt: new Date(),
       });
+
+      const initalSoloRating = initialSoloRating();
 
       await db.insert(solo).values({
         user: login.user.email!,
-        elo: 1000,
+        skill_mu: initalSoloRating.mu,
+        skill_sigma: initalSoloRating.sigma,
+        wins: 0,
+        games: 0,
       });
 
       return true;

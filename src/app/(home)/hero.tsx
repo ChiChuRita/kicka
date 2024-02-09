@@ -11,8 +11,8 @@ import {
   CardTitle,
 } from "@kicka/components/ui/card";
 
-import { getGames } from "@kicka/actions";
 import { getSession } from "@kicka/lib/get-session";
+import { getSolo } from "@kicka/actions";
 
 export default async function Hero() {
   const session = await getSession();
@@ -28,7 +28,9 @@ export default async function Hero() {
           <AvatarImage src={session.user.image} />
           <AvatarFallback>{session.user.name}</AvatarFallback>
         </Avatar>
-        {JSON.stringify(await getGames(session.user.email))}
+        <span>
+          {JSON.stringify(await getSolo(session.user.email), null, 2)}
+        </span>
       </CardContent>
     </Card>
   );

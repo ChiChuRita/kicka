@@ -39,7 +39,13 @@ export default function Single() {
   });
 
   const { execute, status } = useAction(draftSoloGame, {
-    onSuccess: () => setOpen(false),
+    onSuccess: (res) => {
+      if (res.ok) {
+        setOpen(false);
+      } else {
+        setError("root", { message: res.message });
+      }
+    },
   });
 
   const onSubmit = handleSubmit(async (data) => {

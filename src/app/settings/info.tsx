@@ -23,7 +23,7 @@ export default function Info() {
             href="mailto:rahul.singh@kickastudent.hpi.de"
             className="text-wrap text-primary underline-offset-4 hover:cursor-pointer hover:underline"
           >
-            rahul.singh@kickastudent.hpi.de
+            rahul.singh@student.hpi.de
           </a>
         </code>
       </CardContent>

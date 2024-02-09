@@ -1,18 +1,13 @@
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-} from "@tanstack/react-query";
-
+import Games from "./games";
 import Hero from "./hero";
-import Play from "./(game)/play";
-import { getAllOtherUsers } from "@kicka/actions";
+import Play from "./(play)/play";
 
 export default async function Dashboard() {
   return (
     <div className="flex w-full flex-col gap-5">
       <Hero />
       <Play />
+      <Games />
     </div>
   );
 }

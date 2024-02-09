@@ -16,6 +16,7 @@ export default function QueryProvider({ children }: QueryProviderProps) {
         defaultOptions: {
           queries: {
             staleTime: 1000 * 60,
+            refetchInterval: 1000 * 60,
           },
         },
       }),
