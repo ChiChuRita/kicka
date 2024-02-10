@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-export default function Scoreboard() {
+import Header from "@kicka/components/Header";
+
+export default function Rankings() {
   return (
     <main className="">
-      <h1>Scoreboard</h1>
-      <code className="flex flex-col"></code>
+      <Header title="Rankings" />
     </main>
   );
 }

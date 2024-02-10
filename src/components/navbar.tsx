@@ -13,7 +13,7 @@ export default function Navbar() {
         <Button
           variant={currentPath === "/rankings" ? "destructive" : "secondary"}
         >
-          Scoreboard
+          Rankings
         </Button>
       </Link>
       <Link href="/">

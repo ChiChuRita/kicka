@@ -1,4 +1,5 @@
 import Dashboard from "./dashboard";
+import Header from "@kicka/components/Header";
 import Image from "next/image";
 import Login from "./login";
 import { getUnsafeSession } from "@kicka/lib/get-session";
@@ -8,7 +9,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Image src="/logo.svg" alt="kicka logo" width={100} height={100} />
+      <Header title="Home" />
       {session ? <Dashboard /> : <Login />}
     </>
   );
