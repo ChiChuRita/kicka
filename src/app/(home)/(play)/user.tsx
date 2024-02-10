@@ -13,7 +13,7 @@ export function User() {
   const { data: session, status } = useSession();
 
   return (
-    <Button variant="outline" className="w-full justify-start">
+    <Button type="button" variant="outline" className="w-full justify-start">
       {status === "authenticated" && (
         <>
           <Avatar className="mr-2 h-4 w-4">

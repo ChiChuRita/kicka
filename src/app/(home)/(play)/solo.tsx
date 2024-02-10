@@ -77,7 +77,6 @@ export default function Single() {
         ) : (
           <Button type="submit">Draft</Button>
         )}
-        {formState.errors && <span>{JSON.stringify(formState.errors)}</span>}
         <DrawerClose asChild>
           <Button disabled={status === "executing"} variant="outline">
             Cancel

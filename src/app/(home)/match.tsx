@@ -36,15 +36,26 @@ export default function Match({ match }: GameProps) {
   });
 
   return (
-    <Card className="flex flex-col gap-2 p-4">
-      {match.score0} : {match.score1} against...
-      <Button variant="outline" className="justify-start">
-        <Avatar className="mr-2 h-4 w-4">
-          <AvatarImage src={match.player0.image} />
-          <AvatarFallback>{match.player0.name}</AvatarFallback>
-        </Avatar>
-        {match.player0.name}
-      </Button>
+    <Card className="flex flex-col gap-4 p-4">
+      <div className="flex flex-row justify-between">
+        <Button variant="outline" className="w-48 justify-start">
+          <Avatar className="mr-2 h-4 w-4">
+            <AvatarImage src={match.player0.image} />
+            <AvatarFallback>{match.player0.name}</AvatarFallback>
+          </Avatar>
+          {match.player0.name}
+        </Button>
+        <div className="flex flex-col justify-center">
+          {match.score0} : {match.score1}
+        </div>
+        <Button variant="outline" className="w-48 justify-start">
+          <Avatar className="mr-2 h-4 w-4">
+            <AvatarImage src={match.player1.image} />
+            <AvatarFallback>{match.player1.name}</AvatarFallback>
+          </Avatar>
+          {match.player1.name}
+        </Button>
+      </div>
       <div className="flex flex-row items-center justify-between gap-4">
         <span>{timeAgo.format(match.date)}</span>
         <div className="flex flex-row gap-2">
@@ -67,7 +78,6 @@ export default function Match({ match }: GameProps) {
             </Button>
           )}
         </div>
-        <span>Errors: {result?.data?.message}</span>
       </div>
     </Card>
   );

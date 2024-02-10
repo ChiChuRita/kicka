@@ -86,6 +86,8 @@ export const soloMatches = pgTable("solo_matches", {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
   draft: boolean("draft").notNull().default(true),
+  mu0Change: doublePrecision("mu_0_change").default(0).notNull(),
+  mu1Change: doublePrecision("mu_1_change").default(0).notNull(),
 });
 
 export const soloMatchesRelations = relations(soloMatches, ({ one }) => ({

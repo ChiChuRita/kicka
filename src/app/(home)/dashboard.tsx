@@ -1,5 +1,5 @@
-import Games from "./games";
 import Hero from "./hero";
+import Matches from "./matches";
 import Play from "./(play)/play";
 
 export default async function Dashboard() {
@@ -7,7 +7,7 @@ export default async function Dashboard() {
     <div className="flex w-full flex-col gap-5">
       <Hero />
       <Play />
-      <Games />
+      <Matches />
     </div>
   );
 }

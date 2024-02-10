@@ -106,7 +106,7 @@ export async function getSoloMatches() {
       draft: true,
     },
     orderBy: [soloMatches.date],
-    with: { player0: true },
+    with: { player0: true, player1: true },
   });
 }
 
@@ -192,24 +192,22 @@ const updateSoloGameRating = async (args: { winner: Solo; loser: Solo }) => {
       loserRating,
     });
 
-    await Promise.all([
-      tx
-        .update(solo)
-        .set({
-          skill_mu: newWinnerRating.mu,
-          skill_sigma: newWinnerRating.sigma,
-          wins: args.winner.wins + 1,
-          games: args.winner.games + 1,
-        })
-        .where(eq(solo.user, args.winner.user)),
-      tx
-        .update(solo)
-        .set({
-          skill_mu: newLoserRating.mu,
-          skill_sigma: newLoserRating.sigma,
-          games: args.loser.games + 1,
-        })
-        .where(eq(solo.user, args.loser.user)),
-    ]);
+    await tx
+      .update(solo)
+      .set({
+        skill_mu: newWinnerRating.mu,
+        skill_sigma: newWinnerRating.sigma,
+        wins: args.winner.wins + 1,
+        games: args.winner.games + 1,
+      })
+      .where(eq(solo.user, args.winner.user));
+    await tx
+      .update(solo)
+      .set({
+        skill_mu: newLoserRating.mu,
+        skill_sigma: newLoserRating.sigma,
+        games: args.loser.games + 1,
+      })
+      .where(eq(solo.user, args.loser.user));
   });
 };
