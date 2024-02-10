@@ -9,20 +9,23 @@ import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
 import { Card } from "@kicka/components/ui/card";
-import { QueryClient } from "@tanstack/react-query";
 import { timeAgo } from "@kicka/lib/time";
 import { useAction } from "next-safe-action/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 interface GameProps {
   match: GetSoloMatch;
 }
 
 export default function Match({ match }: GameProps) {
-  const queryClient = new QueryClient();
+  const { data: session } = useSession();
+
+  const queryClient = useQueryClient();
 
   const { execute, status, result } = useAction(acceptSoloGame, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
         queryKey: ["matches"],
       }),
         console.log(data);
@@ -44,8 +47,8 @@ export default function Match({ match }: GameProps) {
       </Button>
       <div className="flex flex-row items-center justify-between gap-4">
         <span>{timeAgo.format(match.date)}</span>
-        {match.draft && (
-          <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2">
+          {match.draft && session?.user?.email != match.player0.email && (
             <Button
               onClick={() => execute({ accept: true, id: match.id })}
               variant="secondary"
@@ -53,6 +56,8 @@ export default function Match({ match }: GameProps) {
             >
               Accept
             </Button>
+          )}
+          {match.draft && (
             <Button
               onClick={() => execute({ accept: false, id: match.id })}
               variant="destructive"
@@ -60,8 +65,8 @@ export default function Match({ match }: GameProps) {
             >
               Decline
             </Button>
-          </div>
-        )}
+          )}
+        </div>
         <span>Errors: {result?.data?.message}</span>
       </div>
     </Card>

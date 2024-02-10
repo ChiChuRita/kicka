@@ -2,7 +2,7 @@
 
 import { KickaRating, rate } from "@kicka/lib/skill";
 import { Solo, solo, soloMatches, users } from "@kicka/db/schema";
-import { and, eq, ilike, ne } from "drizzle-orm";
+import { and, eq, ilike, ne, or } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { action } from "@kicka/lib/safe-action";
@@ -94,7 +94,10 @@ export async function getSoloMatches() {
   const session = await getSession();
 
   return await db.query.soloMatches.findMany({
-    where: and(eq(soloMatches.player1, session.user.email)),
+    where: or(
+      eq(soloMatches.player1, session.user.email),
+      eq(soloMatches.player0, session.user.email),
+    ),
     columns: {
       id: true,
       date: true,
@@ -125,13 +128,17 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
 
     if (!match) return new Error("Match not found");
 
-    if (match.player1.email !== session.user.email)
-      return { ok: false, message: "You are not the opponent" };
-
-    if (!args.accept) {
+    if (
+      !args.accept &&
+      (session.user.email === match.player0.email ||
+        session.user.email === match.player1.email)
+    ) {
       await db.delete(soloMatches).where(eq(soloMatches.id, args.id));
       return { ok: true };
     }
+
+    if (match.player1.email !== session.user.email)
+      return { ok: false, message: "You are not the opponent" };
 
     const [_, player0, player1] = await Promise.all([
       db

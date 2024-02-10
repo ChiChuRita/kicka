@@ -1,5 +1,6 @@
 "use client";
 
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { set, z } from "zod";
 
 import { Button } from "@kicka/components/ui/button";
@@ -29,6 +30,8 @@ export type FormSchema = z.infer<typeof formSchema>;
 export default function Single() {
   const [open, setOpen] = useAtom(drawerAtom);
 
+  const queryClient = useQueryClient();
+
   const { handleSubmit, control, register, setError, formState } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,9 +42,12 @@ export default function Single() {
   });
 
   const { execute, status } = useAction(draftSoloGame, {
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       if (res.ok) {
-        setOpen(false);
+        await queryClient.invalidateQueries({
+          queryKey: ["matches"],
+        }),
+          setOpen(false);
       } else {
         setError("root", { message: res.message });
       }
