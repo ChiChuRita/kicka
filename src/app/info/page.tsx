@@ -1,4 +1,4 @@
-import Header from "@kicka/components/Header";
+import Header from "@kicka/components/header";
 import Info from "../settings/info";
 
 export default async function InfoPage() {

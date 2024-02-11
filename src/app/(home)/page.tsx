@@ -6,7 +6,7 @@ import {
 
 import { Button } from "@kicka/components/ui/button";
 import Dashboard from "./dashboard";
-import Header from "@kicka/components/Header";
+import Header from "@kicka/components/header";
 import Image from "next/image";
 import Link from "next/link";
 import Login from "./login";
