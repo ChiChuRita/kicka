@@ -1,13 +1,9 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@kicka/components/ui/card";
-import { InfoIcon, Link } from "lucide-react";
-
-import { Button } from "@kicka/components/ui/button";
 
 export default function Info() {
   return (
