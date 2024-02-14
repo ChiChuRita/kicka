@@ -7,7 +7,7 @@ export default async function InfoPage() {
       <Header title="Info" />
       <div className="flex flex-col gap-2">
         <h4>You are very early!</h4>
-        <ul>
+        <ul className="flex flex-col gap-2">
           <li>
             This is a work in progress. Everything is subject to change. The
             ranking can be reset at any time!
@@ -18,12 +18,12 @@ export default async function InfoPage() {
           </li>
         </ul>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <h4 className="mb-2">Things working</h4>
         <li>None 🤷‍♂️</li>
       </div>
-      <div className="flex flex-col">
-        <ul>
+      <div className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-2">
           <h4 className="mb-2">Things still missing</h4>
           <li>Ranking for Solo 🏆</li>
           <li>Duo 🤝</li>
@@ -31,9 +31,9 @@ export default async function InfoPage() {
           <li>Fancy Animations 🧑‍🎨</li>
         </ul>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <h4 className="mb-2">How does the ranking system work?</h4>
-        <ul>
+        <ul className="flex flex-col gap-2">
           <li>
             You need at least 3 games to be ranked in the respected game mode.
           </li>
