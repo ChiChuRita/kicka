@@ -1,11 +1,12 @@
 import { github, lucia } from "@kicka/lib/auth";
+import { solo, users } from "@kicka/lib/db/schema";
 
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import { db } from "@kicka/lib/db";
 import { eq } from "drizzle-orm";
 import { generateId } from "lucia";
-import { users } from "@kicka/lib/db/schema";
+import { initialSoloRating } from "@kicka/lib/skill";
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -68,6 +69,14 @@ export async function GET(request: Request): Promise<Response> {
       email: githubUserEmail.email,
       image: githubUser.avatar_url,
     });
+
+    const initalRating = initialSoloRating();
+    await db.insert(solo).values({
+      user: userId,
+      skill_mu: initalRating.mu,
+      skill_sigma: initalRating.sigma,
+    });
+
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(

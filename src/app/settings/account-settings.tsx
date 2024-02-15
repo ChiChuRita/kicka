@@ -16,9 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@kicka/components/ui/card";
+import { deleteUser, logout } from "@kicka/actions/auth";
 
 import { Button } from "@kicka/components/ui/button";
-import { logout } from "@kicka/actions/auth";
 
 export default function AccountSettings() {
   return (
@@ -45,7 +45,7 @@ export default function AccountSettings() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => {}}>
+              <AlertDialogAction onClick={async () => await deleteUser()}>
                 Delete Account
               </AlertDialogAction>
             </AlertDialogFooter>

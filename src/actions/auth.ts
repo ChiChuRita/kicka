@@ -36,7 +36,7 @@ export const login = async () => {
 export const deleteUser = async () => {
   const { user } = await getSession();
 
-  await logout();
-
   await db.delete(users).where(eq(users.id, user.id));
+
+  await logout();
 };

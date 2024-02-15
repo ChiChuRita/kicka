@@ -1,4 +1,5 @@
-import { Alert, AlertDescription } from "@kicka/components/ui/alert";
+"use client";
+
 import { Minus, Plus } from "lucide-react";
 import { UseControllerProps, useController } from "react-hook-form";
 
@@ -8,7 +9,7 @@ import { Input } from "@kicka/components/ui/input";
 import { MAX_SCORE } from "@kicka/lib/constants";
 
 export default function NumberInput(props: UseControllerProps<FormSchema>) {
-  const { field, fieldState } = useController(props);
+  const { field } = useController(props);
 
   return (
     <div className="flex flex-row">

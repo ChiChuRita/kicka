@@ -9,6 +9,7 @@ import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
 import { Card } from "@kicka/components/ui/card";
+import { getSession } from "@kicka/actions/auth";
 import { timeAgo } from "@kicka/lib/time";
 import { useAction } from "next-safe-action/hooks";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,8 @@ interface GameProps {
   match: GetSoloMatch;
 }
 
-export default function Match({ match }: GameProps) {
+export default async function Match({ match }: GameProps) {
+  const { user } = await getSession();
   const queryClient = useQueryClient();
 
   const { execute, status, result } = useAction(acceptSoloGame, {
@@ -56,7 +58,7 @@ export default function Match({ match }: GameProps) {
       <div className="flex flex-row items-center justify-between gap-4">
         <span>{timeAgo.format(match.date)}</span>
         <div className="flex flex-row gap-2">
-          {/* {match.draft && session?.user?.email != match.player0.email && (
+          {match.draft && user.id != match.player0.id && (
             <Button
               onClick={() => execute({ accept: true, id: match.id })}
               variant="secondary"
@@ -64,7 +66,7 @@ export default function Match({ match }: GameProps) {
             >
               Accept
             </Button>
-          )} */}
+          )}
           {match.draft && (
             <Button
               onClick={() => execute({ accept: false, id: match.id })}

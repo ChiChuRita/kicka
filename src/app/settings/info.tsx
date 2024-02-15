@@ -19,10 +19,7 @@ export default function Info() {
         <code>Version: 0.0.0-alpha</code>
         <code className="flex flex-row flex-wrap gap-1">
           Feedback:
-          <a
-            href="mailto:rahul.singh@kickastudent.hpi.de"
-            className="text-wrap text-blue-400 text-primary underline-offset-4 hover:cursor-pointer hover:underline"
-          >
+          <a href="mailto:rahul.singh@kickastudent.hpi.de">
             rahul.singh@student.hpi.de
           </a>
         </code>

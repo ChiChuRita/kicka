@@ -81,6 +81,11 @@ export default function Single() {
             Cancel
           </Button>
         </DrawerClose>
+        {formState.errors.root && (
+          <p className="text-sm text-red-500">
+            {formState.errors.root.message}
+          </p>
+        )}
       </form>
     </Card>
   );

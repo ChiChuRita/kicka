@@ -28,7 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function UserSelect(props: UseControllerProps<FormSchema>) {
-  const { field, fieldState } = useController(props);
+  const { field } = useController(props);
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<User>();

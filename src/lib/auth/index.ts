@@ -65,6 +65,10 @@ export const validateRequest = cache(async () => {
 });
 
 export const github = new GitHub(
-  process.env.DEV_GITHUB_ID!,
-  process.env.DEV_GITHUB_SECRET!,
+  process.env.NODE_ENV === "production"
+    ? process.env.GITHUB_ID!
+    : process.env.DEV_GITHUB_ID!,
+  process.env.NODE_ENV === "production"
+    ? process.env.GITHUB_ID!
+    : process.env.DEV_GITHUB_SECRET!,
 );
