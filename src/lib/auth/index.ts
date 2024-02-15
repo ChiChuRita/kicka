@@ -64,20 +64,23 @@ export const validateRequest = cache(async () => {
   return result;
 });
 
-export const github =
-  process.env.NODE_ENV === "production"
-    ? new GitHub(process.env.GITHUB_ID!, process.env.GITHUB_SECRET!)
-    : new GitHub(process.env.DEV_GITHUB_ID!, process.env.DEV_GITHUB_SECRET!);
+export const github = new GitHub(
+  process.env.GITHUB_ID!,
+  process.env.GITHUB_SECRET!,
+  {
+    redirectURI:
+      process.env.NODE_ENV === "production"
+        ? "https://kicka.vercel.app/login/github/callback"
+        : "http://localhost:3000/login/github/callback",
+  },
+);
 
 export const google =
-  process.env.NODE_ENV === "production"
-    ? new Google(
-        process.env.GOOGLE_ID!,
-        process.env.GOOGLE_SECRET!,
-        "https://kicka.vercel.app/login/google/callback",
-      )
-    : new Google(
-        process.env.DEV_GOOGLE_ID!,
-        process.env.DEV_GOOGLE_SECRET!,
-        "http://localhost:3000/login/google/callback",
-      );
+  // process.env.NODE_ENV === "production"
+  new Google(
+    process.env.GOOGLE_ID!,
+    process.env.GOOGLE_SECRET!,
+    process.env.NODE_ENV === "production"
+      ? "https://kicka.vercel.app/login/google/callback"
+      : "http://localhost:3000/login/google/callback",
+  );
