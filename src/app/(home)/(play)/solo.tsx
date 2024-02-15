@@ -6,7 +6,6 @@ import { set, z } from "zod";
 import { Button } from "@kicka/components/ui/button";
 import { Card } from "@kicka/components/ui/card";
 import { DrawerClose } from "@kicka/components/ui/drawer";
-import { Input } from "@kicka/components/ui/input";
 import { MAX_SCORE } from "@kicka/lib/constants";
 import NumberInput from "./number-input";
 import { ReloadIcon } from "@radix-ui/react-icons";

@@ -11,26 +11,22 @@ import {
   CardTitle,
 } from "@kicka/components/ui/card";
 
-import { getSession } from "@kicka/lib/get-session";
-import { getSolo } from "@kicka/actions";
+import { getSession } from "@kicka/actions/auth";
 
 export default async function Hero() {
-  const session = await getSession();
-
+  const { user } = await getSession();
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Welcome {session.user.name}!</CardTitle>
+        <CardTitle>Welcome {user.username}!</CardTitle>
         <CardDescription>Enjoy the game 😉</CardDescription>
       </CardHeader>
       <CardContent>
         <Avatar>
-          <AvatarImage src={session.user.image} />
-          <AvatarFallback>{session.user.name}</AvatarFallback>
+          <AvatarImage src={user.image} />
+          <AvatarFallback>{user.username}</AvatarFallback>
         </Avatar>
-        <span>
-          {JSON.stringify(await getSolo(session.user.email), null, 2)}
-        </span>
+        <span></span>
       </CardContent>
     </Card>
   );

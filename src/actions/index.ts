@@ -1,36 +1,30 @@
 "use server";
 
 import { KickaRating, rate } from "@kicka/lib/skill";
-import { Solo, solo, soloMatches, users } from "@kicka/db/schema";
+import { Solo, solo, soloMatches, users } from "@kicka/lib/db/schema";
 import { and, eq, ilike, ne, or } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { action } from "@kicka/lib/safe-action";
-import { db } from "@kicka/db";
-import { getSession } from "@kicka/lib/get-session";
+import { db } from "@kicka/lib/db";
+import { getSession } from "@kicka/actions/auth";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-
-export async function deleteUser() {
-  const session = await getSession();
-  await db.delete(users).where(eq(users.email, session.user?.email!));
-}
 
 export async function getAllUsers() {
   return await db.query.users.findMany();
 }
 
 export async function getAllOtherUsers() {
-  const session = await getSession();
-
+  const { user } = await getSession();
   return await db.query.users.findMany({
-    where: ne(users.email, session.user.email),
+    where: ne(users.id, user.id),
   });
 }
 
 export async function getUserByName(name: string) {
   return await db.query.users.findMany({
-    where: ilike(users.name, `${name}%`),
+    where: ilike(users.username, `${name}%`),
   });
 }
 
@@ -48,9 +42,9 @@ const draftSoloGameSchema = z.object({
 
 export const draftSoloGame = action(draftSoloGameSchema, async (args) => {
   try {
-    const session = await getSession();
+    const { user } = await getSession();
     const player1 = await db.query.solo.findFirst({
-      where: eq(solo.user, session.user.email),
+      where: eq(solo.user, user.id),
     });
 
     const player2 = await db.query.solo.findFirst({
@@ -64,7 +58,7 @@ export const draftSoloGame = action(draftSoloGameSchema, async (args) => {
       return { ok: false, message: "Draws not allowed" };
 
     await db.insert(soloMatches).values({
-      player0: session.user.email,
+      player0: user.id,
       player1: args.opponent,
       score0: args.myScore,
       score1: args.opponentScore,
@@ -91,12 +85,12 @@ export async function getSolo(user: string) {
 export type GetSoloMatch = Awaited<ReturnType<typeof getSoloMatches>>[number];
 
 export async function getSoloMatches() {
-  const session = await getSession();
+  const { user } = await getSession();
 
   return await db.query.soloMatches.findMany({
     where: or(
-      eq(soloMatches.player1, session.user.email),
-      eq(soloMatches.player0, session.user.email),
+      eq(soloMatches.player1, user.id),
+      eq(soloMatches.player0, user.id),
     ),
     columns: {
       id: true,
@@ -130,14 +124,14 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
 
     if (
       !args.accept &&
-      (session.user.email === match.player0.email ||
-        session.user.email === match.player1.email)
+      (session.user.id === match.player0.id ||
+        session.user.id === match.player1.id)
     ) {
       await db.delete(soloMatches).where(eq(soloMatches.id, args.id));
       return { ok: true };
     }
 
-    if (match.player1.email !== session.user.email)
+    if (match.player1.id !== session.user.id)
       return { ok: false, message: "You are not the opponent" };
 
     const [_, player0, player1] = await Promise.all([
@@ -149,11 +143,11 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
         .where(eq(soloMatches.id, args.id)),
 
       db.query.solo.findFirst({
-        where: eq(solo.user, match.player0.email),
+        where: eq(solo.user, match.player0.id),
       }),
 
       db.query.solo.findFirst({
-        where: eq(solo.user, match.player1.email),
+        where: eq(solo.user, match.player1.id),
       }),
     ]);
 

@@ -7,22 +7,18 @@ import {
 } from "@kicka/components/ui/avatar";
 
 import { Button } from "@kicka/components/ui/button";
-import { useSession } from "next-auth/react";
+import { getSession } from "@kicka/actions/auth";
 
-export function User() {
-  const { data: session, status } = useSession();
+export async function User() {
+  const { user } = await getSession();
 
   return (
     <Button type="button" variant="outline" className="w-full justify-start">
-      {status === "authenticated" && (
-        <>
-          <Avatar className="mr-2 h-4 w-4">
-            <AvatarImage src={session.user?.image!} />
-            <AvatarFallback>{session.user?.name}</AvatarFallback>
-          </Avatar>
-          {session.user?.name}
-        </>
-      )}
+      <Avatar className="mr-2 h-4 w-4">
+        <AvatarImage src={user.image} />
+        <AvatarFallback>{user.username}</AvatarFallback>
+      </Avatar>
+      {user.username}
     </Button>
   );
 }

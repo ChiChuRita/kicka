@@ -18,8 +18,7 @@ import {
 } from "@kicka/components/ui/card";
 
 import { Button } from "@kicka/components/ui/button";
-import { deleteUser } from "@kicka/actions";
-import { signOut } from "next-auth/react";
+import { logout } from "@kicka/actions/auth";
 
 export default function AccountSettings() {
   return (
@@ -29,12 +28,7 @@ export default function AccountSettings() {
         <CardDescription>Manage your account</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-row gap-3">
-        <Button
-          variant={"secondary"}
-          onClick={() => {
-            signOut();
-          }}
-        >
+        <Button variant={"secondary"} onClick={async () => await logout()}>
           Logout
         </Button>
         <AlertDialog>
@@ -51,12 +45,7 @@ export default function AccountSettings() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => {
-                  deleteUser();
-                  signOut();
-                }}
-              >
+              <AlertDialogAction onClick={() => {}}>
                 Delete Account
               </AlertDialogAction>
             </AlertDialogFooter>

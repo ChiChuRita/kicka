@@ -4,17 +4,14 @@ import {
   AlertTitle,
 } from "@kicka/components/ui/alert";
 
-import { Button } from "@kicka/components/ui/button";
 import Dashboard from "./dashboard";
 import Header from "@kicka/components/header";
-import Image from "next/image";
 import Link from "next/link";
 import Login from "./login";
-import { getUnsafeSession } from "@kicka/lib/get-session";
+import { validateRequest } from "@kicka/lib/auth";
 
 export default async function HomePage() {
-  const session = await getUnsafeSession();
-
+  const { session } = await validateRequest();
   return (
     <>
       <Header title="Home" />

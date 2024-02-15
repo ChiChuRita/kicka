@@ -11,7 +11,7 @@ import {
 import { Button } from "@kicka/components/ui/button";
 import GithubIcon from "../../../public/github-mark-white.svg";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function Login() {
   return (
@@ -20,14 +20,17 @@ export default function Login() {
         <CardTitle>Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <Button onClick={() => signIn("github")} variant="secondary">
-          <Image src={GithubIcon} alt="github logo" className="mr-2 h-4 w-4" />
-          Login with Github
-        </Button>
+        <Link href="/login">
+          <Button variant="secondary">
+            <Image
+              src={GithubIcon}
+              alt="github logo"
+              className="mr-2 h-4 w-4"
+            />
+            Login with Github
+          </Button>
+        </Link>
       </CardContent>
-      <CardFooter className="text-muted-foreground">
-        More login options coming soon...
-      </CardFooter>
     </Card>
   );
 }

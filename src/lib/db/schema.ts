@@ -10,8 +10,10 @@ import {
 import { relations, sql } from "drizzle-orm";
 
 export const users = pgTable("users", {
-  email: text("email").primaryKey(),
-  name: text("name").notNull().unique(),
+  id: text("id").primaryKey(),
+  githubId: text("github_id").unique(),
+  email: text("email").notNull().unique(),
+  username: text("name").notNull().unique(),
   image: text("image").notNull(),
   createdAt: timestamp("created_at")
     .notNull()
@@ -19,6 +21,19 @@ export const users = pgTable("users", {
   lastOnlineAt: timestamp("last_online_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export type Session = typeof sessions.$inferSelect;
+
+export const sessions = pgTable("sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
 });
 
 export type User = typeof users.$inferSelect;
@@ -32,7 +47,7 @@ export type Solo = typeof solo.$inferSelect;
 export const solo = pgTable("solo", {
   user: text("user")
     .primaryKey()
-    .references(() => users.email, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   skill_mu: doublePrecision("skill_mu").notNull(),
   skill_sigma: doublePrecision("skill_sigma").notNull(),
   wins: integer("wins").default(0).notNull(),
@@ -42,7 +57,7 @@ export const solo = pgTable("solo", {
 export const soloRelations = relations(solo, ({ one }) => ({
   user: one(users, {
     fields: [solo.user],
-    references: [users.email],
+    references: [users.id],
   }),
 }));
 
@@ -57,10 +72,10 @@ export const duo = pgTable(
     wins: integer("wins").default(0).notNull(),
     games: integer("games").default(0).notNull(),
     user0: text("user_0")
-      .references(() => users.email)
+      .references(() => users.id)
       .notNull(),
     user1: text("user_1")
-      .references(() => users.email)
+      .references(() => users.id)
       .notNull(),
   },
   (t) => ({
@@ -76,10 +91,10 @@ export const soloMatches = pgTable("solo_matches", {
     .$default(() => crypto.randomUUID()),
   player0: text("player_0")
     .notNull()
-    .references(() => users.email, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   player1: text("player_1")
     .notNull()
-    .references(() => users.email, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   score0: integer("score_0").notNull(),
   score1: integer("score_1").notNull(),
   date: timestamp("date")
@@ -93,10 +108,10 @@ export const soloMatches = pgTable("solo_matches", {
 export const soloMatchesRelations = relations(soloMatches, ({ one }) => ({
   player0: one(users, {
     fields: [soloMatches.player0],
-    references: [users.email],
+    references: [users.id],
   }),
   player1: one(users, {
     fields: [soloMatches.player1],
-    references: [users.email],
+    references: [users.id],
   }),
 }));
