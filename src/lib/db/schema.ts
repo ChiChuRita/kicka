@@ -12,8 +12,9 @@ import { relations, sql } from "drizzle-orm";
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   githubId: text("github_id").unique(),
+  googleSub: text("google_sub").unique(),
   email: text("email").notNull().unique(),
-  username: text("name").notNull().unique(),
+  username: text("name").notNull(),
   image: text("image").notNull(),
   createdAt: timestamp("created_at")
     .notNull()

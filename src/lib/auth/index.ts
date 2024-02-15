@@ -1,7 +1,7 @@
+import { GitHub, Google } from "arctic";
 import { User, sessions, users } from "@kicka/lib/db/schema";
 
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { GitHub } from "arctic";
 import { Lucia } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
@@ -64,11 +64,20 @@ export const validateRequest = cache(async () => {
   return result;
 });
 
-export const github = new GitHub(
+export const github =
   process.env.NODE_ENV === "production"
-    ? process.env.GITHUB_ID!
-    : process.env.DEV_GITHUB_ID!,
+    ? new GitHub(process.env.GITHUB_ID!, process.env.GITHUB_SECRET!)
+    : new GitHub(process.env.DEV_GITHUB_ID!, process.env.DEV_GITHUB_SECRET!);
+
+export const google =
   process.env.NODE_ENV === "production"
-    ? process.env.GITHUB_SECRET!
-    : process.env.DEV_GITHUB_SECRET!,
-);
+    ? new Google(
+        process.env.GOOGLE_ID!,
+        process.env.GOOGLE_SECRET!,
+        "https://kicka.vercel.app/login/google/callback",
+      )
+    : new Google(
+        process.env.DEV_GOOGLE_ID!,
+        process.env.DEV_GOOGLE_SECRET!,
+        "http://localhost:3000/login/google/callback",
+      );

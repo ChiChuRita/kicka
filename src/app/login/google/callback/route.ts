@@ -1,4 +1,4 @@
-import { github, lucia } from "@kicka/lib/auth";
+import { google, lucia } from "@kicka/lib/auth";
 import { solo, users } from "@kicka/lib/db/schema";
 
 import { OAuth2RequestError } from "arctic";
@@ -12,37 +12,38 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  const storedState = cookies().get("github_oauth_state")?.value ?? null;
-  if (!code || !state || !storedState || state !== storedState) {
+  const storedState = cookies().get("google_oauth_state")?.value ?? null;
+  const storedCodeVerifier =
+    cookies().get("google_code_verifier")?.value ?? null;
+  if (
+    !code ||
+    !state ||
+    !storedState ||
+    !storedCodeVerifier ||
+    state !== storedState
+  ) {
     return new Response(null, {
       status: 400,
     });
   }
 
   try {
-    const tokens = await github.validateAuthorizationCode(code);
-    const githubUserResponse = await fetch("https://api.github.com/user", {
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
-      },
-    });
-
-    const githubUserEmailResponse = await fetch(
-      "https://api.github.com/user/emails",
+    const tokens = await google.validateAuthorizationCode(
+      code,
+      storedCodeVerifier,
+    );
+    const response = await fetch(
+      "https://openidconnect.googleapis.com/v1/userinfo",
       {
         headers: {
           Authorization: `Bearer ${tokens.accessToken}`,
         },
       },
     );
+    const user: GoogleUser = await response.json();
 
-    const githubUserEmails: GitHubUserEmail[] =
-      await githubUserEmailResponse.json();
-
-    const githubUserEmail = githubUserEmails.find((email) => email.primary)!;
-    const githubUser: GitHubUser = await githubUserResponse.json();
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.githubId, githubUser.id),
+      where: eq(users.email, user.email),
     });
 
     if (existingUser) {
@@ -64,10 +65,10 @@ export async function GET(request: Request): Promise<Response> {
     const userId = generateId(15);
     await db.insert(users).values({
       id: userId,
-      githubId: githubUser.id,
-      username: githubUser.login,
-      email: githubUserEmail.email,
-      image: githubUser.avatar_url,
+      googleSub: user.sub,
+      username: user.name,
+      email: user.email,
+      image: user.picture,
     });
 
     const initalRating = initialSoloRating();
@@ -107,16 +108,9 @@ export async function GET(request: Request): Promise<Response> {
   }
 }
 
-interface GitHubUser {
-  id: string;
-  login: string;
+interface GoogleUser {
+  sub: string;
+  name: string;
   email: string;
-  avatar_url: string;
-}
-
-interface GitHubUserEmail {
-  email: string;
-  primary: boolean;
-  verified: boolean;
-  visibility: "private " | null;
+  picture: string;
 }
