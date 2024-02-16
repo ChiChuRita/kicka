@@ -54,7 +54,7 @@ export default async function InfoPage() {
           <li>
             The rating system to determine every skill number is
             <a
-              className="ml-1 text-blue-500 text-primary underline-offset-4 hover:underline"
+              className="ml-1 text-blue-500  underline-offset-4 hover:underline"
               href="https://www.microsoft.com/en-us/research/wp-content/uploads/2007/01/NIPS2006_0688.pdf"
             >
               TrueSkill™

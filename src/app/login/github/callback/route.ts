@@ -47,7 +47,8 @@ export async function GET(request: Request): Promise<Response> {
     });
 
     if (existingUser) {
-      db.update(users)
+      await db
+        .update(users)
         .set({ image: githubUser.avatar_url, lastOnlineAt: new Date() })
         .where(eq(users.id, existingUser.id));
       const session = await lucia.createSession(existingUser.id, {});
