@@ -80,10 +80,7 @@
   h4 {
     @apply scroll-m-20 text-xl font-semibold tracking-tight
   }
-  p {
-    @apply leading-7 [&:not(:first-child)]:mt-6
-  }
   ul {  
-    @apply pl-1 list-inside list-disc
-  }
+    @apply list-outside list-disc
+  }  
 }

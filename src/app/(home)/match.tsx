@@ -9,7 +9,6 @@ import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
 import { Card } from "@kicka/components/ui/card";
-import { timeAgo } from "@kicka/lib/time";
 import { useAction } from "next-safe-action/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
@@ -27,8 +26,7 @@ export default function Match({ match }: GameProps) {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: ["matches"],
-      }),
-        console.log(data);
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -37,48 +35,25 @@ export default function Match({ match }: GameProps) {
 
   return (
     <Card className="flex flex-col gap-4 p-4">
-      <div className="flex flex-row justify-between">
-        <Button variant="outline" className="w-48 justify-start">
-          <Avatar className="mr-2 h-4 w-4">
-            <AvatarImage src={match.player0.image} />
-            <AvatarFallback>{match.player0.username}</AvatarFallback>
-          </Avatar>
-          {match.player0.username} {!match.draft && match.mu0Change}
+      <span>{JSON.stringify(match, null, 2)}</span>
+      {data && match.draft && data.user.id != match.player0.id && (
+        <Button
+          onClick={() => execute({ accept: true, id: match.id })}
+          variant="secondary"
+          disabled={status === "executing"}
+        >
+          Accept
         </Button>
-        <div className="flex flex-col justify-center">
-          {match.score0} : {match.score1}
-        </div>
-        <Button variant="outline" className="w-48 justify-start">
-          <Avatar className="mr-2 h-4 w-4">
-            <AvatarImage src={match.player1.image} />
-            <AvatarFallback>{match.player1.username}</AvatarFallback>
-          </Avatar>
-          {match.player1.username} {!match.draft && match.mu1Change}
+      )}
+      {match.draft && (
+        <Button
+          onClick={() => execute({ accept: false, id: match.id })}
+          variant="destructive"
+          disabled={status === "executing"}
+        >
+          Decline
         </Button>
-      </div>
-      <div className="flex flex-row items-center justify-between gap-4">
-        <span>{timeAgo.format(match.date)}</span>
-        <div className="flex flex-row gap-2">
-          {data && match.draft && data.user.id != match.player0.id && (
-            <Button
-              onClick={() => execute({ accept: true, id: match.id })}
-              variant="secondary"
-              disabled={status === "executing"}
-            >
-              Accept
-            </Button>
-          )}
-          {match.draft && (
-            <Button
-              onClick={() => execute({ accept: false, id: match.id })}
-              variant="destructive"
-              disabled={status === "executing"}
-            >
-              Decline
-            </Button>
-          )}
-        </div>
-      </div>
+      )}
     </Card>
   );
 }
