@@ -9,17 +9,18 @@ import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
 import { Card } from "@kicka/components/ui/card";
-import { getSession } from "@kicka/actions/auth";
 import { timeAgo } from "@kicka/lib/time";
 import { useAction } from "next-safe-action/hooks";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "@kicka/lib/auth/useSession";
 
 interface GameProps {
   match: GetSoloMatch;
 }
 
-export default async function Match({ match }: GameProps) {
-  const { user } = await getSession();
+export default function Match({ match }: GameProps) {
+  const { data } = useSession();
+
   const queryClient = useQueryClient();
 
   const { execute, status, result } = useAction(acceptSoloGame, {
@@ -42,7 +43,7 @@ export default async function Match({ match }: GameProps) {
             <AvatarImage src={match.player0.image} />
             <AvatarFallback>{match.player0.username}</AvatarFallback>
           </Avatar>
-          {match.player0.username}
+          {match.player0.username} {!match.draft && match.mu0Change}
         </Button>
         <div className="flex flex-col justify-center">
           {match.score0} : {match.score1}
@@ -52,13 +53,13 @@ export default async function Match({ match }: GameProps) {
             <AvatarImage src={match.player1.image} />
             <AvatarFallback>{match.player1.username}</AvatarFallback>
           </Avatar>
-          {match.player1.username}
+          {match.player1.username} {!match.draft && match.mu1Change}
         </Button>
       </div>
       <div className="flex flex-row items-center justify-between gap-4">
         <span>{timeAgo.format(match.date)}</span>
         <div className="flex flex-row gap-2">
-          {match.draft && user.id != match.player0.id && (
+          {data && match.draft && data.user.id != match.player0.id && (
             <Button
               onClick={() => execute({ accept: true, id: match.id })}
               variant="secondary"

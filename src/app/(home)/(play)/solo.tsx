@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
-  user2: z.string().email(),
+  user2: z.string(),
   score1: z.number().int().min(0).max(MAX_SCORE),
   score2: z.number().int().min(0).max(MAX_SCORE),
 });
@@ -49,6 +49,7 @@ export default function Single() {
           setOpen(false);
       } else {
         setError("root", { message: res.message });
+        console.log(res.message);
       }
     },
   });

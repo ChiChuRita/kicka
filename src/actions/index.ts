@@ -35,7 +35,7 @@ export async function getUserByEmail(email: string) {
 }
 
 const draftSoloGameSchema = z.object({
-  opponent: z.string().email(),
+  opponent: z.string(),
   myScore: z.number().int().min(0).max(MAX_SCORE),
   opponentScore: z.number().int().min(0).max(MAX_SCORE),
 });
@@ -98,6 +98,8 @@ export async function getSoloMatches() {
       score0: true,
       score1: true,
       draft: true,
+      mu0Change: true,
+      mu1Change: true,
     },
     orderBy: [soloMatches.date],
     with: { player0: true, player1: true },
@@ -134,14 +136,7 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
     if (match.player1.id !== session.user.id)
       return { ok: false, message: "You are not the opponent" };
 
-    const [_, player0, player1] = await Promise.all([
-      db
-        .update(soloMatches)
-        .set({
-          draft: false,
-        })
-        .where(eq(soloMatches.id, args.id)),
-
+    const [player0, player1] = await Promise.all([
       db.query.solo.findFirst({
         where: eq(solo.user, match.player0.id),
       }),
@@ -156,7 +151,7 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
     const winner = match.score0 > match.score1 ? player0 : player1;
     const loser = match.score0 > match.score1 ? player1 : player0;
 
-    await updateSoloGameRating({ winner, loser });
+    await updateSoloGameRating({ matchId: match.id, winner, loser });
 
     revalidatePath("/");
     return { ok: true };
@@ -171,7 +166,11 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
   }
 });
 
-const updateSoloGameRating = async (args: { winner: Solo; loser: Solo }) => {
+const updateSoloGameRating = async (args: {
+  matchId: string;
+  winner: Solo;
+  loser: Solo;
+}) => {
   await db.transaction(async (tx) => {
     const winnerRating = new KickaRating(
       args.winner.skill_mu,
@@ -203,5 +202,10 @@ const updateSoloGameRating = async (args: { winner: Solo; loser: Solo }) => {
         games: args.loser.games + 1,
       })
       .where(eq(solo.user, args.loser.user));
+    await tx.update(soloMatches).set({
+      draft: false,
+      mu0Change: newWinnerRating.mu - args.winner.skill_mu,
+      mu1Change: newLoserRating.mu - args.loser.skill_mu,
+    });
   });
 };

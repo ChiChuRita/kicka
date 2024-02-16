@@ -19,7 +19,7 @@ export default function Matches() {
   });
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-none">
       <CardHeader>
         <CardTitle>Matches</CardTitle>
       </CardHeader>

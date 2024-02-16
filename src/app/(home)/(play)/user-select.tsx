@@ -70,7 +70,7 @@ export default function UserSelect(props: UseControllerProps<FormSchema>) {
                   key={user.username}
                   value={user.username}
                   onSelect={(currentValue) => {
-                    field.onChange(user.email);
+                    field.onChange(user.id);
                     setValue(
                       currentValue === value?.username.toLowerCase()
                         ? undefined

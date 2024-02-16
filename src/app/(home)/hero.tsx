@@ -12,6 +12,7 @@ import {
 } from "@kicka/components/ui/card";
 
 import { getSession } from "@kicka/actions/auth";
+import { getSolo } from "@kicka/actions";
 
 export default async function Hero() {
   const { user } = await getSession();
@@ -21,12 +22,12 @@ export default async function Hero() {
         <CardTitle>Welcome {user.username}!</CardTitle>
         <CardDescription>Enjoy the game 😉</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <Avatar>
           <AvatarImage src={user.image} />
           <AvatarFallback>{user.username}</AvatarFallback>
         </Avatar>
-        <span></span>
+        {JSON.stringify(await getSolo(user.id), null, 2)}
       </CardContent>
     </Card>
   );
