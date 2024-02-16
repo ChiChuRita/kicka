@@ -64,29 +64,28 @@ export default function Single() {
 
   return (
     <Card className="flex flex-col gap-2 border-none">
-      <form className="flex flex-col gap-2" onSubmit={onSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         <User />
-        <NumberInput control={control} name="score1" />
-        <NumberInput control={control} name="score2" />
+        <div className="flex flex-col items-center gap-2">
+          <NumberInput control={control} name="score1" />
+          <NumberInput control={control} name="score2" />
+        </div>
         <UserSelect control={control} name="user2" />
-        {status === "executing" ? (
-          <Button disabled>
-            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            Please wait
-          </Button>
-        ) : (
-          <Button type="submit">Draft</Button>
-        )}
-        <DrawerClose asChild>
-          <Button disabled={status === "executing"} variant="outline">
-            Cancel
-          </Button>
-        </DrawerClose>
-        {formState.errors.root && (
-          <p className="text-sm text-red-500">
-            {formState.errors.root.message}
-          </p>
-        )}
+        <div className="flex flex-col gap-2">
+          {status === "executing" ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          ) : (
+            <Button type="submit">Draft</Button>
+          )}
+          <DrawerClose asChild>
+            <Button disabled={status === "executing"} variant="outline">
+              Cancel
+            </Button>
+          </DrawerClose>
+        </div>
       </form>
     </Card>
   );
