@@ -54,7 +54,7 @@ export default async function InfoPage() {
           <li>
             The rating system to determine every skill number is
             <a
-              className="ml-1 text-blue-400 text-primary underline-offset-4 hover:underline"
+              className="ml-1 text-blue-500 text-primary underline-offset-4 hover:underline"
               href="https://www.microsoft.com/en-us/research/wp-content/uploads/2007/01/NIPS2006_0688.pdf"
             >
               TrueSkill™
@@ -67,7 +67,7 @@ export default async function InfoPage() {
         <h4 className="mb-2">
           For a fair ranking we need to agree on the kicker game rules
         </h4>
-        <ul>
+        <ul className="flex flex-col gap-2">
           <li>Still working on that.</li>
           <li>They will be here once I am done 🤓</li>
         </ul>
