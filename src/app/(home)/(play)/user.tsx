@@ -15,10 +15,14 @@ export function User() {
   const { data } = useSession();
 
   return (
-    <Button type="button" variant="outline" className="w-full justify-start">
+    <Button
+      type="button"
+      variant="outline"
+      className="h-12 w-full justify-start"
+    >
       {data && (
         <>
-          <Avatar className="mr-2 h-4 w-4">
+          <Avatar className="mr-2 h-6 w-6">
             <AvatarImage src={data.user.image} />
             <AvatarFallback>{data.user.username}</AvatarFallback>
           </Avatar>

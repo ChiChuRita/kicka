@@ -45,11 +45,11 @@ export default function UserSelect(props: UseControllerProps<FormSchema>) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="h-12 w-full justify-between"
         >
           <div className="flex flex-row items-center">
             {value && (
-              <Avatar className="mr-2 h-4 w-4">
+              <Avatar className="mr-2 h-6 w-6">
                 <AvatarImage src={value.image} />
                 <AvatarFallback>{value.username}</AvatarFallback>
               </Avatar>
@@ -67,6 +67,7 @@ export default function UserSelect(props: UseControllerProps<FormSchema>) {
             {data &&
               data.map((user) => (
                 <CommandItem
+                  className="h-10"
                   key={user.username}
                   value={user.username}
                   onSelect={(currentValue) => {
@@ -82,7 +83,7 @@ export default function UserSelect(props: UseControllerProps<FormSchema>) {
                     setOpen(false);
                   }}
                 >
-                  <Avatar className="mr-2 h-4 w-4">
+                  <Avatar className="mr-2 h-6 w-6">
                     <AvatarImage src={user.image} />
                     <AvatarFallback>{user.username}</AvatarFallback>
                   </Avatar>

@@ -65,12 +65,12 @@ export default function Single() {
   return (
     <Card className="flex flex-col gap-2 border-none">
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-        <User />
-        <div className="flex flex-col items-center gap-2">
-          <NumberInput control={control} name="score1" />
-          <NumberInput control={control} name="score2" />
-        </div>
         <UserSelect control={control} name="user2" />
+        <div className="flex flex-col items-center gap-2">
+          <NumberInput control={control} name="score2" />
+          <NumberInput control={control} name="score1" />
+        </div>
+        <User />
         <div className="flex flex-col gap-2">
           {status === "executing" ? (
             <Button disabled>
