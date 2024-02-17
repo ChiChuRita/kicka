@@ -20,6 +20,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
         className={cn(
           "flex min-h-screen justify-center bg-background font-sans antialiased",

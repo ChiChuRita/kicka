@@ -81,6 +81,6 @@
     @apply scroll-m-20 text-xl font-semibold tracking-tight
   }
   ul {  
-    @apply list-outside list-disc
+    @apply list-outside list-disc ml-6 
   }  
 }

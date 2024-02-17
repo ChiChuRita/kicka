@@ -16,19 +16,18 @@ export default function NumberInput(props: UseControllerProps<FormSchema>) {
       <Button
         type="button"
         variant="outline"
-        className="h-14 w-14 rounded-none rounded-l border-r-0"
+        className="h-12 w-16 rounded-none rounded-l border-r-0"
         onClick={() => {
           const value = (field.value as number) - 10;
           field.onChange(Math.max(0, value));
         }}
       >
         -10
-        <Minus />
       </Button>
       <Button
         type="button"
         variant="outline"
-        className="h-14 w-14 rounded-none border-r-0"
+        className="h-12 w-16 rounded-none border-r-0"
         onClick={() => {
           const value = (field.value as number) - 1;
           field.onChange(Math.max(0, value));
@@ -38,12 +37,12 @@ export default function NumberInput(props: UseControllerProps<FormSchema>) {
       </Button>
       <Input
         type="number"
-        className="z-10 flex h-14 w-16 rounded-none text-center text-lg hover:outline-none"
+        className="z-10 flex h-12 w-24 rounded-none text-center text-xl hover:outline-none"
         {...field}
       />
       <Button
         type="button"
-        className="h-14 w-14 rounded-none border-l-0 p-3"
+        className="h-12 w-16 rounded-none border-l-0 p-3"
         variant="outline"
         onClick={() => {
           const value = (field.value as number) + 1;
@@ -55,14 +54,13 @@ export default function NumberInput(props: UseControllerProps<FormSchema>) {
       <Button
         type="button"
         variant="outline"
-        className="h-14 w-14 rounded-none rounded-r border-l-0"
+        className="h-12 w-16 rounded-none rounded-r border-l-0"
         onClick={() => {
           const value = (field.value as number) + 10;
           field.onChange(Math.min(MAX_SCORE, value));
         }}
       >
         +10
-        <Plus />
       </Button>
     </div>
   );

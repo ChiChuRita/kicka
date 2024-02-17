@@ -63,30 +63,29 @@ export default function Single() {
   });
 
   return (
-    <Card className="flex flex-col gap-2 border-none">
-      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-        <UserSelect control={control} name="user2" />
-        <div className="flex flex-col items-center gap-2">
-          <NumberInput control={control} name="score2" />
-          <NumberInput control={control} name="score1" />
-        </div>
-        <User />
-        <div className="flex flex-col gap-2">
-          {status === "executing" ? (
-            <Button disabled>
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </Button>
-          ) : (
-            <Button type="submit">Draft</Button>
-          )}
-          <DrawerClose asChild>
-            <Button disabled={status === "executing"} variant="outline">
-              Cancel
-            </Button>
-          </DrawerClose>
-        </div>
-      </form>
-    </Card>
+    <form className="flex flex-col gap-3" onSubmit={onSubmit}>
+      <UserSelect control={control} name="user2" />
+      <div className="flex flex-col items-center gap-4">
+        <NumberInput control={control} name="score2" />
+        <span>VS</span>
+        <NumberInput control={control} name="score1" />
+      </div>
+      <User />
+      <div className="mt-4 flex flex-col gap-2">
+        {status === "executing" ? (
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        ) : (
+          <Button type="submit">Draft</Button>
+        )}
+        <DrawerClose asChild>
+          <Button disabled={status === "executing"} variant="outline">
+            Cancel
+          </Button>
+        </DrawerClose>
+      </div>
+    </form>
   );
 }

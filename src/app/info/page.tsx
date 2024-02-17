@@ -24,8 +24,8 @@ export default async function InfoPage() {
         </ul>
       </div>
       <div className="flex flex-col gap-2">
+        <h4 className="mb-2">Things still missing</h4>
         <ul className="flex flex-col gap-2">
-          <h4 className="mb-2">Things still missing</h4>
           <li>Ranking for Solo 🏆</li>
           <li>Duo 🤝</li>
           <li>Ranking for Duo 🏆</li>

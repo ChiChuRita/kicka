@@ -7,8 +7,6 @@ import {
 } from "@kicka/components/ui/avatar";
 
 import { Button } from "@kicka/components/ui/button";
-import { getSession } from "@kicka/actions/auth";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
 
 export function User() {
