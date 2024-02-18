@@ -1,14 +1,18 @@
 "use client";
 
-import { Minus, Plus } from "lucide-react";
-import { UseControllerProps, useController } from "react-hook-form";
+import {
+  FieldValues,
+  UseControllerProps,
+  useController,
+} from "react-hook-form";
 
 import { Button } from "@kicka/components/ui/button";
-import { FormSchema } from "./solo";
 import { Input } from "@kicka/components/ui/input";
 import { MAX_SCORE } from "@kicka/lib/constants";
 
-export default function NumberInput(props: UseControllerProps<FormSchema>) {
+export default function NumberInput<FM extends FieldValues>(
+  props: UseControllerProps<FM>,
+) {
   const { field } = useController(props);
 
   return (

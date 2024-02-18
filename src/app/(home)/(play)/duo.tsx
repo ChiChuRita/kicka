@@ -1,10 +1,6 @@
 "use client";
 
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { set, z } from "zod";
-
 import { Button } from "@kicka/components/ui/button";
-import { Card } from "@kicka/components/ui/card";
 import { DrawerClose } from "@kicka/components/ui/drawer";
 import { MAX_SCORE } from "@kicka/lib/constants";
 import NumberInput from "./number-input";
@@ -16,6 +12,8 @@ import { drawerAtom } from "@kicka/lib/global-state";
 import { useAction } from "next-safe-action/hooks";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
@@ -33,16 +31,17 @@ export default function Single() {
 
   const queryClient = useQueryClient();
 
-  const { handleSubmit, control, register, setError, formState } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      score1: 0,
-      score2: 0,
-      user2: "",
-      uesr3: "",
-      user4: "",
-    },
-  });
+  const { handleSubmit, control, register, setError, formState } =
+    useForm<FormSchema>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        score1: 0,
+        score2: 0,
+        user2: "",
+        user3: "",
+        user4: "",
+      },
+    });
 
   const { execute, status } = useAction(draftSoloGame, {
     onSuccess: async (res) => {

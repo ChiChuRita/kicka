@@ -14,11 +14,11 @@ export default function Rankings() {
     <>
       <Header title="Rankings" />
       <Tabs defaultValue="solo">
-        <TabsList className="flex w-36 flex-row">
-          <TabsTrigger className="w-full" value="solo">
+        <TabsList className="flex h-12 w-36 flex-row">
+          <TabsTrigger className="h-10 w-full" value="solo">
             Solo
           </TabsTrigger>
-          <TabsTrigger className="w-full" value="duo">
+          <TabsTrigger className="h-10 w-full" value="duo">
             Duo
           </TabsTrigger>
         </TabsList>

@@ -13,21 +13,26 @@ import {
   CommandItem,
 } from "@kicka/components/ui/command";
 import {
+  FieldValues,
+  UseControllerProps,
+  useController,
+} from "react-hook-form";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@kicka/components/ui/popover";
-import { UseControllerProps, useController } from "react-hook-form";
 
 import { Button } from "@kicka/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { FormSchema } from "./solo";
 import { User } from "@kicka/lib/db/schema";
 import { getAllOtherUsers } from "@kicka/actions";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function UserSelect(props: UseControllerProps<FormSchema>) {
+export default function UserSelect<FM extends FieldValues>(
+  props: UseControllerProps<FM>,
+) {
   const { field } = useController(props);
 
   const [open, setOpen] = useState(false);

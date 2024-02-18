@@ -31,14 +31,15 @@ export default function Single() {
 
   const queryClient = useQueryClient();
 
-  const { handleSubmit, control, register, setError, formState } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      score1: 0,
-      score2: 0,
-      user2: "",
-    },
-  });
+  const { handleSubmit, control, register, setError, formState } =
+    useForm<FormSchema>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        score1: 0,
+        score2: 0,
+        user2: "",
+      },
+    });
 
   const { execute, status } = useAction(draftSoloGame, {
     onSuccess: async (res) => {
