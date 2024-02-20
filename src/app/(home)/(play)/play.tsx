@@ -44,11 +44,11 @@ export default function Play() {
           defaultValue="solo"
           className="mx-auto flex max-w-md flex-col gap-4 p-8"
         >
-          <TabsList className="h-12">
-            <TabsTrigger className="h-10 w-full" value="solo">
+          <TabsList>
+            <TabsTrigger className="w-full" value="solo">
               Solo
             </TabsTrigger>
-            <TabsTrigger className="h-10 w-full" value="duo">
+            <TabsTrigger className="w-full" value="duo">
               Duo
             </TabsTrigger>
           </TabsList>

@@ -2,7 +2,7 @@
 
 import { KickaRating, rate } from "@kicka/lib/skill";
 import { Solo, solo, soloMatches, users } from "@kicka/lib/db/schema";
-import { and, eq, ilike, ne, or } from "drizzle-orm";
+import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { action } from "@kicka/lib/safe-action";
@@ -208,4 +208,29 @@ const updateSoloGameRating = async (args: {
       mu1Change: newLoserRating.mu - args.loser.skill_mu,
     });
   });
+};
+
+export type SoloRankingEntry = Awaited<
+  ReturnType<typeof getSoloRanking>
+>[number];
+
+export const getSoloRanking = async (cursor: number) => {
+  return new Array(100)
+    .fill(
+      await db.query.solo.findMany({
+        columns: {
+          skill_mu: true,
+          games: true,
+          wins: true,
+        },
+        with: {
+          user: true,
+        },
+        offset: 0,
+        limit: 20,
+        orderBy: [desc(solo.skill_mu)],
+      }),
+    )
+    .flat()
+    .slice(cursor, cursor + 20);
 };
