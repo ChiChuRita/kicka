@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Tabs,
   TabsContent,
@@ -17,13 +15,13 @@ import {
 import { getSoloRanking } from "@kicka/actions";
 
 export default async function Rankings() {
-  // const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
 
-  // await queryClient.prefetchInfiniteQuery({
-  //   queryKey: ["solo-ranking"],
-  //   queryFn: ({ pageParam }) => getSoloRanking(pageParam),
-  //   initialPageParam: 0,
-  // });
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["solo-ranking"],
+    queryFn: ({ pageParam }) => getSoloRanking(pageParam),
+    initialPageParam: 0,
+  });
 
   return (
     <>

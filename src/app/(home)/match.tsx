@@ -36,7 +36,7 @@ export default function Match({ match }: GameProps) {
 
   return (
     <Card className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <Button variant={"outline"}>
             <Avatar className="mr-2 h-4 w-4">
