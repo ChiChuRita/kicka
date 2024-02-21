@@ -12,7 +12,6 @@ import {
 } from "@kicka/components/ui/card";
 
 import { getSession } from "@kicka/actions/auth";
-import { getSolo } from "@kicka/actions";
 
 export default async function Hero() {
   const { user } = await getSession();
@@ -27,7 +26,6 @@ export default async function Hero() {
           <AvatarImage src={user.image} />
           <AvatarFallback>{user.username}</AvatarFallback>
         </Avatar>
-        {JSON.stringify(await getSolo(user.id), null, 2)}
       </CardContent>
     </Card>
   );

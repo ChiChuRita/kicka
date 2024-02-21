@@ -9,10 +9,12 @@ import { DrawerClose } from "@kicka/components/ui/drawer";
 import { MAX_SCORE } from "@kicka/lib/constants";
 import NumberInput from "./number-input";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { Separator } from "@kicka/components/ui/separator";
 import { User } from "./user";
 import UserSelect from "./user-select";
 import { draftSoloGame } from "@kicka/actions";
 import { drawerAtom } from "@kicka/lib/global-state";
+import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
@@ -46,8 +48,11 @@ export default function Single() {
       if (res.ok) {
         await queryClient.invalidateQueries({
           queryKey: ["matches"],
-        }),
-          setOpen(false);
+        });
+        toast("Game drafted", {
+          description: "Now the other player has to accept the results!",
+        });
+        setOpen(false);
       } else {
         setError("root", { message: res.message });
         console.log(res.message);
@@ -68,7 +73,11 @@ export default function Single() {
       <UserSelect control={control} name="user2" />
       <div className="flex flex-col items-center gap-4">
         <NumberInput control={control} name="score2" />
-        <span>VS</span>
+        <div className="flex flex-row items-center justify-center gap-2">
+          <Separator className="w-12" />
+          <span>VS</span>
+          <Separator className="w-12" />
+        </div>
         <NumberInput control={control} name="score1" />
       </div>
       <User />

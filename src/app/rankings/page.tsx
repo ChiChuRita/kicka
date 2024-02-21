@@ -1,4 +1,9 @@
 import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import {
   Tabs,
   TabsContent,
   TabsList,
@@ -7,11 +12,6 @@ import {
 
 import Header from "@kicka/components/header";
 import SoloRankings from "./solo";
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-} from "@tanstack/react-query";
 import { getSoloRanking } from "@kicka/actions";
 
 export default async function Rankings() {
@@ -19,7 +19,7 @@ export default async function Rankings() {
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["solo-ranking"],
-    queryFn: ({ pageParam }) => getSoloRanking(pageParam),
+    queryFn: ({ pageParam }) => getSoloRanking(pageParam, 20),
     initialPageParam: 0,
   });
 
@@ -35,11 +35,12 @@ export default async function Rankings() {
             Duo
           </TabsTrigger>
         </TabsList>
-        <span className="text-red-500">This is just a UI preview!</span>
-        <TabsContent value="solo">
-          <SoloRankings />
-        </TabsContent>
-        <TabsContent value="duo">Here are the duo rankings.</TabsContent>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <TabsContent value="solo">
+            <SoloRankings />
+          </TabsContent>
+          <TabsContent value="duo">Here are the duo rankings.</TabsContent>
+        </HydrationBoundary>
       </Tabs>
     </>
   );

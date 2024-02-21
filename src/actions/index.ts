@@ -51,11 +51,13 @@ export const draftSoloGame = action(draftSoloGameSchema, async (args) => {
       where: eq(solo.user, args.opponent),
     });
 
-    if (!player2 || !player1)
-      return { ok: false, message: "Opponent not found" };
+    if (!player2 || !player1) throw new Error("Opponent not found");
+
+    if (player1.user === player2.user)
+      throw new Error("You can't play with yourself");
 
     if (args.myScore === args.opponentScore)
-      return { ok: false, message: "Draws not allowed" };
+      throw new Error("Draws are not allowed");
 
     await db.insert(soloMatches).values({
       player0: user.id,
@@ -122,7 +124,7 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
       },
     });
 
-    if (!match) return new Error("Match not found");
+    if (!match) throw new Error("Match not found");
 
     if (
       !args.accept &&
@@ -134,7 +136,7 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
     }
 
     if (match.player1.id !== session.user.id)
-      return { ok: false, message: "You are not the opponent" };
+      throw new Error("You are not the opponent");
 
     const [player0, player1] = await Promise.all([
       db.query.solo.findFirst({
@@ -146,7 +148,7 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
       }),
     ]);
 
-    if (!player0 || !player1) return new Error("FATAL ERROR: Player not found");
+    if (!player0 || !player1) throw new Error("FATAL ERROR: Player not found");
 
     const winner = match.score0 > match.score1 ? player0 : player1;
     const loser = match.score0 > match.score1 ? player1 : player0;
@@ -214,23 +216,18 @@ export type SoloRankingEntry = Awaited<
   ReturnType<typeof getSoloRanking>
 >[number];
 
-export const getSoloRanking = async (cursor: number) => {
-  return new Array(100)
-    .fill(
-      await db.query.solo.findMany({
-        columns: {
-          skill_mu: true,
-          games: true,
-          wins: true,
-        },
-        with: {
-          user: true,
-        },
-        offset: 0,
-        limit: 20,
-        orderBy: [desc(solo.skill_mu)],
-      }),
-    )
-    .flat()
-    .slice(cursor, cursor + 20);
+export const getSoloRanking = async (cursor: number, pageLength = 20) => {
+  return await db.query.solo.findMany({
+    columns: {
+      skill_mu: true,
+      games: true,
+      wins: true,
+    },
+    with: {
+      user: true,
+    },
+    offset: cursor,
+    limit: pageLength,
+    orderBy: [desc(solo.skill_mu)],
+  });
 };

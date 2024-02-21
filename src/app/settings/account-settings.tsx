@@ -34,7 +34,7 @@ export default function AccountSettings() {
           Logout
         </Button>
         <AlertDialog>
-          <AlertDialogTrigger>
+          <AlertDialogTrigger asChild>
             <Button variant="destructive">Delete Account</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>

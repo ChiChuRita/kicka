@@ -13,7 +13,6 @@ export default function Info() {
     <Card>
       <CardHeader className="p-6 pb-3">
         <CardTitle>Information</CardTitle>
-        <CardDescription>Information about the game</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <div className="flex flex-col">

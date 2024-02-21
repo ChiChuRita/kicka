@@ -50,7 +50,7 @@ export default function UserSelect<FM extends FieldValues>(
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-12 w-full justify-between"
+          className="w-full justify-between"
         >
           <div className="flex flex-row items-center">
             {value && (

@@ -1,18 +1,22 @@
 "use client";
 
-import { Variants, useInView } from "framer-motion";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import SoloRankingEntry from "./entry";
-import { getSoloRanking } from "@kicka/actions";
 import { useEffect, useRef } from "react";
 
+import SoloRankingEntry from "./entry";
+import { getSoloRanking } from "@kicka/actions";
+import { useInView } from "framer-motion";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
+const pageLength = 20;
+
 export default function SoloRankings() {
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ["solo-ranking"],
-    queryFn: ({ pageParam }) => getSoloRanking(pageParam),
-    initialPageParam: 0,
-    getNextPageParam: (_, pages) => pages.length + 1,
-  });
+  const { data, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery({
+      queryKey: ["solo-ranking"],
+      queryFn: ({ pageParam }) => getSoloRanking(pageParam, pageLength),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, pages) => pages.length * pageLength,
+    });
 
   const entries = data?.pages.flatMap((page) => page);
 
@@ -20,7 +24,7 @@ export default function SoloRankings() {
   const isinView = useInView(lastEntryRef);
 
   useEffect(() => {
-    if (isinView) {
+    if (isinView && !isFetching) {
       fetchNextPage();
       console.log("fetching next page");
     }
@@ -32,7 +36,7 @@ export default function SoloRankings() {
       {entries?.map((entry, idx) => (
         <SoloRankingEntry entry={entry} place={idx} key={entry.user.id} />
       ))}
-      <span ref={lastEntryRef}>Loading...</span>
+      <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
     </div>
   );
 }
