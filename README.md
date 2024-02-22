@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Welcome to Kicka: The Table Football Matchmaking Web Application
 
-## Getting Started
+Kicka is a matchmaking web application designed to rank the best table football players. Whether you're a seasoned player or just starting out, Kicka provides a platform for competitive matches and accurate skill assessment.
 
-First, run the development server:
+To experience Kicka firsthand, visit [Kicka](https://kicka.vercel.app).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Play 1v1 or 2v2 matches.
+- Enter the results of your games directly into the app.
+- The app calculates and assigns a skill rating to each player.
+- View your global ranking among all players.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Getting Started with Development
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Kicka is built with [Next.js](https://nextjs.org/) and utilizes [Vercel Serverless Postgres](https://vercel.com/storage/postgres). If you prefer to use your own PostgreSQL database, you'll need to modify the database adapter and provide your credentials.
 
-## Learn More
+For authentication, Kicka supports login via Google or Github accounts. If you wish to deploy your own instance of the server, you'll need to obtain Google OAuth and/or Github credentials.
 
-To learn more about Next.js, take a look at the following resources:
+### Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+   ```bash
+   bun install
+   ```
 
-## Deploy on Vercel
+2. Run the development server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   bun run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application locally.
+
+### Font Optimization
+
+This project utilizes [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load the Inter font, a custom Google Font, enhancing the visual experience for users.
