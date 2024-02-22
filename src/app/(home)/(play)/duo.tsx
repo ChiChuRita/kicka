@@ -5,6 +5,7 @@ import { DrawerClose } from "@kicka/components/ui/drawer";
 import { MAX_SCORE } from "@kicka/lib/constants";
 import NumberInput from "./number-input";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { Separator } from "@kicka/components/ui/separator";
 import { User } from "./user";
 import UserSelect from "./user-select";
 import { draftSoloGame } from "@kicka/actions";
@@ -69,7 +70,11 @@ export default function Single() {
       </div>
       <div className="flex flex-col items-center gap-4">
         <NumberInput control={control} name="score2" />
-        <span>VS</span>
+        <div className="flex flex-row items-center justify-center gap-2">
+          <Separator className="w-12" />
+          <span>VS</span>
+          <Separator className="w-12" />
+        </div>
         <NumberInput control={control} name="score1" />
       </div>
       <div className="flex flex-row gap-2">

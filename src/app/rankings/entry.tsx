@@ -16,9 +16,7 @@ export default function SoloRankingEntry({ place, entry }: SoloRankingsProps) {
           <AvatarImage src={entry.user.image} alt={entry.user.username} />
           <AvatarFallback>{entry.user.username[0]}</AvatarFallback>
         </Avatar>
-        <span>
-          {place + 1}. {entry.user.username}
-        </span>
+        <span>{entry.user.username}</span>
       </div>
       <div className="flex flex-row gap-2">
         Skill: <span>{Math.round(entry.skill_mu)}</span>

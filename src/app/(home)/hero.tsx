@@ -15,6 +15,7 @@ import { getSession } from "@kicka/actions/auth";
 
 export default async function Hero() {
   const { user } = await getSession();
+
   return (
     <Card className="w-full">
       <CardHeader>

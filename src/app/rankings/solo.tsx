@@ -7,7 +7,7 @@ import { getSoloRanking } from "@kicka/actions";
 import { useInView } from "framer-motion";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const pageLength = 20;
+const pageLength = 10;
 
 export default function SoloRankings() {
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
@@ -21,15 +21,13 @@ export default function SoloRankings() {
   const entries = data?.pages.flatMap((page) => page);
 
   const lastEntryRef = useRef(null);
-  const isinView = useInView(lastEntryRef);
+  const isInView = useInView(lastEntryRef);
 
   useEffect(() => {
-    if (isinView && !isFetching) {
+    if (isInView && !isFetching) {
       fetchNextPage();
-      console.log("fetching next page");
     }
-    console.log("in view", isinView);
-  }, [isinView]);
+  }, [isInView]);
 
   return (
     <div className="flex flex-col gap-2">

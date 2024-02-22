@@ -11,6 +11,7 @@ import {
 } from "@kicka/components/ui/tabs";
 
 import Header from "@kicka/components/header";
+import Image from "next/image";
 import SoloRankings from "./solo";
 import { getSoloRanking } from "@kicka/actions";
 
@@ -29,9 +30,23 @@ export default async function Rankings() {
       <Tabs defaultValue="solo">
         <TabsList className="flex w-36 flex-row">
           <TabsTrigger className="w-full" value="solo">
+            <Image
+              src="solo.svg"
+              width={10}
+              height={10}
+              alt="solo image"
+              className="mr-1"
+            />
             Solo
           </TabsTrigger>
           <TabsTrigger className="w-full" value="duo">
+            <Image
+              src="duo.svg"
+              width={15}
+              height={10}
+              alt="duo image"
+              className="mr-1"
+            />
             Duo
           </TabsTrigger>
         </TabsList>

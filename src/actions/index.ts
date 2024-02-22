@@ -2,7 +2,7 @@
 
 import { KickaRating, rate } from "@kicka/lib/skill";
 import { Solo, solo, soloMatches, users } from "@kicka/lib/db/schema";
-import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
+import { desc, eq, ilike, ne, or } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { action } from "@kicka/lib/safe-action";
@@ -86,7 +86,7 @@ export async function getSolo(user: string) {
 
 export type GetSoloMatch = Awaited<ReturnType<typeof getSoloMatches>>[number];
 
-export async function getSoloMatches() {
+export async function getSoloMatches(cursor: number, pageLength = 10) {
   const { user } = await getSession();
 
   return await db.query.soloMatches.findMany({
@@ -103,8 +103,10 @@ export async function getSoloMatches() {
       mu0Change: true,
       mu1Change: true,
     },
-    orderBy: [soloMatches.date],
+    orderBy: [desc(soloMatches.date)],
     with: { player0: true, player1: true },
+    offset: cursor,
+    limit: pageLength,
   });
 }
 

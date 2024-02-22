@@ -4,9 +4,9 @@ export default async function InfoPage() {
   return (
     <>
       <Header title="Info" />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col">
         <h4>You are very early!</h4>
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col">
           <li>
             This is a work in progress. Everything is subject to change. The
             ranking can be reset at any time!
@@ -17,24 +17,24 @@ export default async function InfoPage() {
           </li>
         </ul>
       </div>
-      <div className="flex flex-col gap-2">
-        <h4 className="mb-2">Things working</h4>
-        <ul className="flex flex-col gap-2">
+      <div className="flex flex-col">
+        <h4>Things working</h4>
+        <ul className="flex flex-col ">
           <li>None 🤷‍♂️</li>
         </ul>
       </div>
-      <div className="flex flex-col gap-2">
-        <h4 className="mb-2">Things still missing</h4>
-        <ul className="flex flex-col gap-2">
+      <div className="flex flex-col ">
+        <h4>Things still missing</h4>
+        <ul className="flex flex-col">
           <li>Ranking for Solo 🏆</li>
           <li>Duo 🤝</li>
           <li>Ranking for Duo 🏆</li>
           <li>Fancy Animations 🧑‍🎨</li>
         </ul>
       </div>
-      <div className="flex flex-col gap-2">
-        <h4 className="mb-2">How does the ranking system work?</h4>
-        <ul className="flex flex-col gap-2">
+      <div className="flex flex-col ">
+        <h4>How does the ranking system work?</h4>
+        <ul className="flex flex-col">
           <li>
             You need at least 3 games to be ranked in the respected game mode.
           </li>
@@ -67,7 +67,7 @@ export default async function InfoPage() {
         <h4 className="mb-2">
           For a fair ranking we need to agree on the kicker game rules
         </h4>
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col">
           <li>Still working on that.</li>
           <li>They will be here once I am done 🤓</li>
         </ul>

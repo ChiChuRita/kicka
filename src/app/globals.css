@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 @layer base {
   :root {
@@ -60,7 +59,6 @@
   }
 }
 
- 
 @layer base {
   * {
     @apply border-border;
@@ -69,18 +67,18 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply scroll-m-20 text-4xl font-extrabold lg:text-4xl
+    @apply scroll-m-20 text-4xl font-extrabold lg:text-4xl;
   }
   h2 {
-    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0;
   }
   h3 {
-    @apply scroll-m-20 text-2xl font-semibold tracking-tight
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
   }
   h4 {
-    @apply scroll-m-20 text-xl font-semibold tracking-tight
+    @apply scroll-m-20 text-xl font-semibold tracking-tight;
   }
-  ul {  
-    @apply list-outside list-disc ml-6 
-  }  
+  ul {
+    @apply my-6 ml-6 list-disc [&>li]:mt-2;
+  }
 }

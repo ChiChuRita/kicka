@@ -36,69 +36,57 @@ export default function Match({ match }: GameProps) {
 
   return (
     <Card className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center justify-between">
-          <Button variant={"outline"}>
-            <Avatar className="mr-2 h-4 w-4">
-              <AvatarImage src={match.player0.image} />
-              <AvatarFallback>{match.player0.username[0]}</AvatarFallback>
-            </Avatar>
-            {match.player0.username}
-          </Button>
-          <span
-            className={
-              Math.round(match.mu1Change) > 0
-                ? "text-green-400"
-                : "text-red-400"
-            }
-          >
-            {Math.round(match.mu1Change)}
-          </span>
-        </div>
+      <div className="flex flex-row items-center justify-between">
+        <Button className="w-40" variant={"outline"}>
+          <Avatar className="mr-2 h-4 w-4">
+            <AvatarImage src={match.player0.image} />
+            <AvatarFallback>{match.player0.username[0]}</AvatarFallback>
+          </Avatar>
+          {match.player0.username}
+        </Button>
         <div className="flex flex-row items-center justify-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-border">
+          <div className="flex h-9 w-9 items-center justify-center rounded border">
             {match.score0}
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-border">
+          <div className="flex h-9 w-9 items-center justify-center rounded border">
             {match.score1}
           </div>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Button variant={"outline"}>
+          <Button variant={"outline"} className="w-40 ">
             <Avatar className="mr-2 h-4 w-4">
               <AvatarImage src={match.player1.image} />
               <AvatarFallback>{match.player1.username[0]}</AvatarFallback>
             </Avatar>
             {match.player1.username}
           </Button>
-          <span
-            className={
-              Math.round(match.mu0Change) > 0
-                ? "text-green-400"
-                : "text-red-400"
-            }
-          >
-            {Math.round(match.mu0Change)}
-          </span>
         </div>
       </div>
-      {data && match.draft && data.user.id != match.player0.id && (
-        <Button
-          onClick={() => execute({ accept: true, id: match.id })}
-          variant="secondary"
-          disabled={status === "executing"}
-        >
-          Accept
-        </Button>
-      )}
       {match.draft && (
-        <Button
-          onClick={() => execute({ accept: false, id: match.id })}
-          variant="destructive"
-          disabled={status === "executing"}
-        >
-          Decline
-        </Button>
+        <div className="flex flex-row items-center justify-between gap-2">
+          <span>Draft</span>
+          <div className="flex flex-row gap-2">
+            {data && data.user.id != match.player0.id && (
+              <Button
+                onClick={() => execute({ accept: true, id: match.id })}
+                variant="secondary"
+                className="w-24"
+                disabled={status === "executing"}
+              >
+                Accept
+              </Button>
+            )}
+
+            <Button
+              onClick={() => execute({ accept: false, id: match.id })}
+              variant="destructive"
+              className="w-24"
+              disabled={status === "executing"}
+            >
+              Decline
+            </Button>
+          </div>
+        </div>
       )}
     </Card>
   );
