@@ -37,14 +37,12 @@ export default function Matches() {
   }, [isInView]);
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Matches</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
+      <h3>Matches</h3>
+      <div className="flex flex-col gap-2">
         {matches?.map((match) => <Match key={match.id} match={match} />)}
         <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
