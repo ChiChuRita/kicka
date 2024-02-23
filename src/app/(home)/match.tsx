@@ -8,8 +8,6 @@ import {
 import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
-import { Card } from "@kicka/components/ui/card";
-import { cn } from "@kicka/lib/utils";
 import { useAction } from "next-safe-action/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
@@ -35,7 +33,7 @@ export default function Match({ match }: GameProps) {
   });
 
   return (
-    <Card className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 rounded-md border p-4">
       <div className="flex flex-row items-center justify-between">
         <Button className="w-40" variant={"outline"}>
           <Avatar className="mr-2 h-4 w-4">
@@ -88,6 +86,6 @@ export default function Match({ match }: GameProps) {
           </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 }
