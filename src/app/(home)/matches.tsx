@@ -1,11 +1,5 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@kicka/components/ui/card";
 import { useEffect, useRef } from "react";
 
 import Match from "./match";

@@ -13,7 +13,6 @@ import {
 } from "@kicka/components/ui/tabs";
 
 import { Button } from "@kicka/components/ui/button";
-import { Card } from "@kicka/components/ui/card";
 import Duo from "./duo";
 import Solo from "./solo";
 import { drawerAtom } from "@kicka/lib/global-state";
