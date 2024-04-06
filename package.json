@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:view": "drizzle-kit studio",
     "db:push": "drizzle-kit push:pg"
+    "bunv": "bun -v"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
