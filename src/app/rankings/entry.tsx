@@ -1,4 +1,4 @@
-import { SoloRankingEntry } from "@kicka/actions";
+import type { SoloRankingEntry } from "@kicka/actions";
 import { Avatar, AvatarImage } from "@kicka/components/ui/avatar";
 import { AvatarFallback } from "@kicka/components/ui/avatar";
 import React from "react";
