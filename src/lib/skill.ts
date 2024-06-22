@@ -33,10 +33,11 @@ export function initialSoloRating() {
   return new KickaRating(500, 166.667);
 }
 
-export function initialDuoRating() {
-  return KickaRating.fromRating(new Rating());
-}
-
 export function initialTeamRating() {
   return new KickaRating(500, 166.667);
+}
+
+//This rating is more for the flex
+export function initialDuoRating() {
+  return KickaRating.fromRating(new Rating());
 }
