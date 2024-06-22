@@ -23,16 +23,15 @@ export default async function InfoPage() {
           <li>None 🤷‍♂️</li>
         </ul>
       </div>
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         <h4>Things still missing</h4>
         <ul className="flex flex-col">
-          <li>Ranking for Solo 🏆</li>
           <li>Duo 🤝</li>
           <li>Ranking for Duo 🏆</li>
           <li>Fancy Animations 🧑‍🎨</li>
         </ul>
       </div>
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         <h4>How does the ranking system work?</h4>
         <ul className="flex flex-col">
           <li>

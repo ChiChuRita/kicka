@@ -79,6 +79,6 @@
     @apply scroll-m-20 text-xl font-semibold tracking-tight;
   }
   ul {
-    @apply my-6 ml-6 list-disc [&>li]:mt-2;
+    @apply my-2 ml-2 list-disc [&>li]:mt-2;
   }
 }
