@@ -5,7 +5,8 @@ import {
   pgTable,
   text,
   timestamp,
-  unique,
+  primaryKey,
+  foreignKey,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
@@ -49,8 +50,8 @@ export const solo = pgTable("solo", {
   user: text("user")
     .primaryKey()
     .references(() => users.id, { onDelete: "cascade" }),
-  skill_mu: doublePrecision("skill_mu").notNull(),
-  skill_sigma: doublePrecision("skill_sigma").notNull(),
+  skillMu: doublePrecision("skill_mu").notNull(),
+  skillSigma: doublePrecision("skill_sigma").notNull(),
   wins: integer("wins").default(0).notNull(),
   games: integer("games").default(0).notNull(),
 });
@@ -73,16 +74,63 @@ export const duo = pgTable(
     wins: integer("wins").default(0).notNull(),
     games: integer("games").default(0).notNull(),
     user0: text("user_0")
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
     user1: text("user_1")
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
   },
   (t) => ({
-    unq: unique().on(t.user0, t.user1),
+    id: primaryKey({ name: "id", columns: [t.user0, t.user1] }),
   }),
 );
+
+export const duoMatches = pgTable("duo_matches", {
+  id: text("id")
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
+  player0: text("player_0")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  player1: text("player_1")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  player2: text("player_2")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  player3: text("player_3")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  score0: integer("score_0").notNull(),
+  score1: integer("score_1").notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  draft: boolean("draft").notNull().default(true),
+  accept0: boolean("accept_0").notNull().default(false),
+  accept1: boolean("accept_1").notNull().default(false),
+  accept2: boolean("accept_2").notNull().default(false),
+  accept3: boolean("accept_3").notNull().default(false),
+  mu0Change: doublePrecision("mu_0_change").default(0).notNull(),
+  mu1Change: doublePrecision("mu_1_change").default(0).notNull(),
+});
+
+export const duoMatchesRelations = relations(duoMatches, ({ one }) => ({
+  player0: one(users, {
+    fields: [duoMatches.player0],
+    references: [users.id],
+  }),
+  player1: one(users, {
+    fields: [duoMatches.player1],
+    references: [users.id],
+  }),
+  player2: one(users, {
+    fields: [duoMatches.player2],
+    references: [users.id],
+  }),
+  player3: one(users, {
+    fields: [duoMatches.player3],
+    references: [users.id],
+  }),
+}));
 
 export type SoloMatch = typeof soloMatches.$inferSelect;
 
@@ -98,10 +146,10 @@ export const soloMatches = pgTable("solo_matches", {
     .references(() => users.id, { onDelete: "cascade" }),
   score0: integer("score_0").notNull(),
   score1: integer("score_1").notNull(),
-  date: timestamp("date")
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+  date: timestamp("date").defaultNow().notNull(),
   draft: boolean("draft").notNull().default(true),
+  accept0: boolean("accept_0").notNull().default(false),
+  accept1: boolean("accept_1").notNull().default(false),
   mu0Change: doublePrecision("mu_0_change").default(0).notNull(),
   mu1Change: doublePrecision("mu_1_change").default(0).notNull(),
 });

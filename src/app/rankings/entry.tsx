@@ -19,7 +19,7 @@ export default function SoloRankingEntry({ place, entry }: SoloRankingsProps) {
         <span>{entry.user.username}</span>
       </div>
       <div className="flex flex-row gap-2">
-        Skill: <span>{Math.round(entry.skill_mu)}</span>
+        Skill: <span>{Math.round(entry.skillMu)}</span>
         Wins: <span>{entry.wins}</span>
       </div>
     </div>

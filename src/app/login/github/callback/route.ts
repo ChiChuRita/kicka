@@ -78,8 +78,8 @@ export async function GET(request: Request): Promise<Response> {
     const initalRating = initialSoloRating();
     await db.insert(solo).values({
       user: userId,
-      skill_mu: initalRating.mu,
-      skill_sigma: initalRating.sigma,
+      skillMu: initalRating.mu,
+      skillSigma: initalRating.sigma,
     });
 
     const session = await lucia.createSession(userId, {});
