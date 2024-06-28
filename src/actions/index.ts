@@ -43,6 +43,7 @@ type DraftSoloGameArgs = z.infer<typeof draftSoloGameSchema>;
 
 export async function draftSoloGame(args: DraftSoloGameArgs) {
   try {
+    draftSoloGameSchema.parse(args);
     const { user } = await getSession();
     const player1 = await db.query.solo.findFirst({
       where: eq(solo.user, user.id),
@@ -120,6 +121,7 @@ type AcceptSoloGameArgs = z.infer<typeof acceptSoloGameSchema>;
 
 export async function acceptSoloGame(args: AcceptSoloGameArgs) {
   try {
+    acceptSoloGameSchema.parse(args);
     const session = await getSession();
     const match = await db.query.soloMatches.findFirst({
       where: eq(soloMatches.id, args.id),
