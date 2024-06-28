@@ -10,10 +10,9 @@ import { User } from "./user";
 import UserSelect from "./user-select";
 import { draftSoloGame } from "@kicka/actions";
 import { drawerAtom } from "@kicka/lib/global-state";
-import { useAction } from "next-safe-action/hooks";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -44,7 +43,8 @@ export default function Single() {
       },
     });
 
-  const { execute, status } = useAction(draftSoloGame, {
+  const { mutate, status } = useMutation({
+    mutationFn: draftSoloGame,
     onSuccess: async (res) => {
       if (res.ok) {
         await queryClient.invalidateQueries({
@@ -82,7 +82,7 @@ export default function Single() {
         <UserSelect control={control} name="user2" />
       </div>
       <div className="mt-4 flex flex-col gap-2">
-        {status === "executing" ? (
+        {status === "pending" ? (
           <Button disabled>
             <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             Please wait
@@ -91,7 +91,7 @@ export default function Single() {
           <Button type="submit">Draft</Button>
         )}
         <DrawerClose asChild>
-          <Button disabled={status === "executing"} variant="outline">
+          <Button disabled={status === "pending"} variant="outline">
             Cancel
           </Button>
         </DrawerClose>

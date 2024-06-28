@@ -8,8 +8,7 @@ import {
 import { GetSoloMatch, acceptSoloGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
-import { useAction } from "next-safe-action/hooks";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
 
 interface GameProps {
@@ -21,7 +20,8 @@ export default function Match({ match }: GameProps) {
 
   const queryClient = useQueryClient();
 
-  const { execute, status, result } = useAction(acceptSoloGame, {
+  const { mutate, status } = useMutation({
+    mutationFn: acceptSoloGame,
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: ["matches"],
@@ -66,20 +66,20 @@ export default function Match({ match }: GameProps) {
           <div className="flex flex-row gap-2">
             {data && data.user.id != match.player0.id && (
               <Button
-                onClick={() => execute({ accept: true, id: match.id })}
+                onClick={() => mutate({ accept: true, id: match.id })}
                 variant="secondary"
                 className="w-24"
-                disabled={status === "executing"}
+                disabled={status === "pending"}
               >
                 Accept
               </Button>
             )}
 
             <Button
-              onClick={() => execute({ accept: false, id: match.id })}
+              onClick={() => mutate({ accept: false, id: match.id })}
               variant="destructive"
               className="w-24"
-              disabled={status === "executing"}
+              disabled={status === "pending"}
             >
               Decline
             </Button>

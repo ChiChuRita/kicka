@@ -5,7 +5,6 @@ import { Solo, solo, soloMatches, users } from "@kicka/lib/db/schema";
 import { desc, eq, ilike, ne, or } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
-import { action } from "@kicka/lib/safe-action";
 import { db } from "@kicka/lib/db";
 import { getSession } from "@kicka/actions/auth";
 import { revalidatePath } from "next/cache";
@@ -40,7 +39,9 @@ const draftSoloGameSchema = z.object({
   opponentScore: z.number().int().min(0).max(MAX_SCORE),
 });
 
-export const draftSoloGame = action(draftSoloGameSchema, async (args) => {
+type DraftSoloGameArgs = z.infer<typeof draftSoloGameSchema>;
+
+export async function draftSoloGame(args: DraftSoloGameArgs) {
   try {
     const { user } = await getSession();
     const player1 = await db.query.solo.findFirst({
@@ -74,7 +75,7 @@ export const draftSoloGame = action(draftSoloGameSchema, async (args) => {
     }
     return { ok: false, message: "An error occurred" };
   }
-});
+}
 
 export async function getSolo(user: string) {
   const games = await db.query.solo.findFirst({
@@ -115,7 +116,9 @@ const acceptSoloGameSchema = z.object({
   id: z.string(),
 });
 
-export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
+type AcceptSoloGameArgs = z.infer<typeof acceptSoloGameSchema>;
+
+export async function acceptSoloGame(args: AcceptSoloGameArgs) {
   try {
     const session = await getSession();
     const match = await db.query.soloMatches.findFirst({
@@ -168,13 +171,13 @@ export const acceptSoloGame = action(acceptSoloGameSchema, async (args) => {
     }
     return { ok: false, message: "An error occurred... deleting draft" };
   }
-});
+}
 
-const updateSoloGameRating = async (args: {
+async function updateSoloGameRating(args: {
   matchId: string;
   winner: Solo;
   loser: Solo;
-}) => {
+}) {
   await db.transaction(async (tx) => {
     const winnerRating = new KickaRating(
       args.winner.skill_mu,
@@ -212,7 +215,7 @@ const updateSoloGameRating = async (args: {
       mu1Change: newLoserRating.mu - args.loser.skill_mu,
     });
   });
-};
+}
 
 export type SoloRankingEntry = Awaited<
   ReturnType<typeof getSoloRanking>
@@ -232,4 +235,8 @@ export const getSoloRanking = async (cursor: number, pageLength = 20) => {
     limit: pageLength,
     orderBy: [desc(solo.skill_mu)],
   });
+};
+
+export const getDuoRanking = async (cursor: number, pageLength = 20) => {
+  console.log("YEET");
 };

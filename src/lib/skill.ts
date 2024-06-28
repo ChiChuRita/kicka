@@ -1,4 +1,5 @@
 import { Rating, rate_1vs1 } from "ts-trueskill";
+import { INITIAL_RATING_MU, INITIAL_RATING_SIGMA } from "./constants";
 
 export class KickaRating {
   constructor(
@@ -30,11 +31,11 @@ export function rate(args: {
 }
 
 export function initialSoloRating() {
-  return new KickaRating(500, 166.667);
+  return new KickaRating(INITIAL_RATING_MU, INITIAL_RATING_SIGMA);
 }
 
 export function initialTeamRating() {
-  return new KickaRating(500, 166.667);
+  return new KickaRating(INITIAL_RATING_MU, INITIAL_RATING_SIGMA);
 }
 
 //This rating is more for the flex

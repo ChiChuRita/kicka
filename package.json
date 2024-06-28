@@ -39,7 +39,6 @@
     "lucia": "^3.0.1",
     "lucide-react": "^0.314.0",
     "next": "latest",
-    "next-safe-action": "^6.0.2",
     "next-themes": "^0.2.1",
     "oslo": "^1.1.1",
     "react": "^18",
