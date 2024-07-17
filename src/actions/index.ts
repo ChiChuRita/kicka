@@ -27,6 +27,19 @@ export async function getAllOtherUsers() {
   });
 }
 
+export async function getAllOtherUsersExcept([id2, id3, id4]: string[]) {
+  const { user } = await getSession();
+  const res = await db.query.users.findMany({
+    where: and(
+      ne(users.id, user.id),
+      ne(users.id, id2),
+      ne(users.id, id3),
+      ne(users.id, id4),
+    ),
+  });
+  return res;
+}
+
 export async function getUserByName(name: string) {
   return await db.query.users.findMany({
     where: ilike(users.username, `${name}%`),

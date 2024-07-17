@@ -16,6 +16,8 @@ import {
   FieldValues,
   UseControllerProps,
   useController,
+  useFormContext,
+  useFormState,
 } from "react-hook-form";
 import {
   Popover,
@@ -26,21 +28,27 @@ import {
 import { Button } from "@kicka/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
 import { User } from "@kicka/lib/db/schema";
-import { getAllOtherUsers } from "@kicka/actions";
-import { useQuery } from "@tanstack/react-query";
+import { getAllOtherUsers, getAllOtherUsersExcept } from "@kicka/actions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { FormSchema } from "./duo";
 
 export default function UserSelect<FM extends FieldValues>(
   props: UseControllerProps<FM>,
 ) {
+  const { getValues } = useFormContext<FormSchema>();
   const { field } = useController(props);
-
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<User>();
 
+  const allUsers = getValues();
+
+  const queryClient = useQueryClient();
+
   const { data } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => getAllOtherUsers(),
+    queryKey: ["users", allUsers.user2, allUsers.user3, allUsers.user4],
+    queryFn: () =>
+      getAllOtherUsersExcept([allUsers.user2, allUsers.user3, allUsers.user4]),
   });
 
   return (
@@ -75,7 +83,10 @@ export default function UserSelect<FM extends FieldValues>(
                   className="h-10"
                   key={user.username}
                   value={user.username}
-                  onSelect={(currentValue) => {
+                  onSelect={async (currentValue) => {
+                    await queryClient.refetchQueries({
+                      queryKey: ["users"],
+                    });
                     field.onChange(user.id);
                     setValue(
                       currentValue === value?.username.toLowerCase()
