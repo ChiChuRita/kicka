@@ -1,6 +1,6 @@
 "use server";
 
-import { KickaRating, initialDuoRating, rate } from "@kicka/lib/skill";
+import { KickaRating, initialTeamRating, rate } from "@kicka/lib/skill";
 import {
   duo,
   duoMatches,
@@ -8,13 +8,49 @@ import {
   soloMatches,
   users,
 } from "@kicka/lib/db/schema";
-import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
+
+import { and, desc, eq, ilike, ne, or, inArray } from "drizzle-orm";
 
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { db } from "@kicka/lib/db";
 import { getSession } from "@kicka/actions/auth";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+
+export async function getOwnTeamName(user1?: string) {
+  const { user } = await getSession();
+  const user0 = user.id;
+
+  if (!user0 || !user1) return "";
+
+  const sortedUser0 = user0 < user1 ? user0 : user1;
+  const sortedUser1 = user0 < user1 ? user1 : user0;
+
+  const team = await db.query.duo.findFirst({
+    columns: {
+      name: true,
+    },
+    where: and(eq(duo.user0, sortedUser0), eq(duo.user1, sortedUser1)),
+  });
+
+  return team ? team.name : "";
+}
+
+export async function getTeamName(user0?: string, user1?: string) {
+  if (!user0 || !user1) return "";
+
+  const sortedUser0 = user0 < user1 ? user0 : user1;
+  const sortedUser1 = user0 < user1 ? user1 : user0;
+
+  const team = await db.query.duo.findFirst({
+    columns: {
+      name: true,
+    },
+    where: and(eq(duo.user0, sortedUser0), eq(duo.user1, sortedUser1)),
+  });
+
+  return team ? team.name : "";
+}
 
 export async function getAllUsers() {
   return await db.query.users.findMany();
@@ -25,19 +61,6 @@ export async function getAllOtherUsers() {
   return await db.query.users.findMany({
     where: ne(users.id, user.id),
   });
-}
-
-export async function getAllOtherUsersExcept([id2, id3, id4]: string[]) {
-  const { user } = await getSession();
-  const res = await db.query.users.findMany({
-    where: and(
-      ne(users.id, user.id),
-      ne(users.id, id2),
-      ne(users.id, id3),
-      ne(users.id, id4),
-    ),
-  });
-  return res;
 }
 
 export async function getUserByName(name: string) {
@@ -70,19 +93,19 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
 
     let [myPlayer0, myPlayer1, opponentPlayer0, opponentPlayer1] =
       await Promise.all([
-        await db.query.users.findFirst({
+        db.query.users.findFirst({
           where: eq(users.id, user.id),
         }),
 
-        await db.query.users.findFirst({
+        db.query.users.findFirst({
           where: eq(users.id, args.partner),
         }),
 
-        await db.query.users.findFirst({
+        db.query.users.findFirst({
           where: eq(users.id, args.opponent1),
         }),
 
-        await db.query.users.findFirst({
+        db.query.users.findFirst({
           where: eq(users.id, args.opponent2),
         }),
       ]);
@@ -103,47 +126,65 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
     if (args.myScore === args.opponentScore)
       throw new Error("Draws are not allowed");
 
-    myPlayer0 = myPlayer0.id < myPlayer1.id ? myPlayer0 : myPlayer1;
-    myPlayer1 = myPlayer0.id < myPlayer1.id ? myPlayer1 : myPlayer0;
+    const sortedMyPlayer0 = myPlayer0.id < myPlayer1.id ? myPlayer0 : myPlayer1;
+    const sortedMyPlayer1 = myPlayer0.id < myPlayer1.id ? myPlayer1 : myPlayer0;
 
-    opponentPlayer0 =
+    const sortedOpponentPlayer0 =
       opponentPlayer0.id < opponentPlayer1.id
         ? opponentPlayer0
         : opponentPlayer1;
 
-    opponentPlayer1 =
+    const sortedOpponentPlayer1 =
       opponentPlayer0.id < opponentPlayer1.id
         ? opponentPlayer1
         : opponentPlayer0;
 
     const team0 = await db.query.duo.findFirst({
-      where: and(eq(duo.user0, myPlayer0.id), eq(duo.user1, myPlayer1.id)),
+      where: and(
+        eq(duo.user0, sortedMyPlayer0.id),
+        eq(duo.user1, sortedMyPlayer1.id),
+      ),
     });
 
     const team1 = await db.query.duo.findFirst({
       where: and(
-        eq(duo.user0, opponentPlayer0.id),
-        eq(duo.user1, opponentPlayer1.id),
+        eq(duo.user0, sortedOpponentPlayer0.id),
+        eq(duo.user1, sortedOpponentPlayer1.id),
       ),
     });
 
-    const initial = initialDuoRating();
+    const initial = initialTeamRating();
 
     if (!team0) {
       await db.insert(duo).values({
         name: args.teamName,
-        user0: myPlayer0.id,
-        user1: myPlayer1.id,
+        user0: sortedMyPlayer0.id,
+        user1: sortedMyPlayer1.id,
         skillMu: initial.mu,
         skillSigma: initial.sigma,
       });
+    } else {
+      await db
+        .update(duo)
+        .set({
+          name: args.teamName,
+        })
+        .where(
+          and(
+            eq(duo.user0, sortedMyPlayer0.id),
+            eq(duo.user1, sortedMyPlayer1.id),
+          ),
+        );
     }
 
     if (!team1) {
       await db.insert(duo).values({
-        name: opponentPlayer0.id + " + " + opponentPlayer1.id,
-        user0: opponentPlayer0.id,
-        user1: opponentPlayer1.id,
+        name:
+          sortedOpponentPlayer0.username +
+          " + " +
+          sortedOpponentPlayer1.username,
+        user0: sortedOpponentPlayer0.id,
+        user1: sortedOpponentPlayer1.id,
         skillMu: initial.mu,
         skillSigma: initial.sigma,
       });
@@ -152,10 +193,10 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
     const match = await db
       .insert(duoMatches)
       .values({
-        player0: myPlayer0.id,
-        player1: myPlayer1.id,
-        player2: opponentPlayer0.id,
-        player3: opponentPlayer1.id,
+        player0: sortedMyPlayer0.id,
+        player1: sortedMyPlayer1.id,
+        player2: sortedOpponentPlayer0.id,
+        player3: sortedOpponentPlayer1.id,
         score0: args.myScore,
         score1: args.opponentScore,
       })
@@ -250,8 +291,90 @@ export const getSoloRanking = async (cursor: number, pageLength = 20) => {
   });
 };
 
-export type GetSoloMatch = Awaited<ReturnType<typeof getSoloMatches>>[number];
+export async function getMatches(cursor: number, pageLength = 10) {
+  const { user } = await getSession();
 
+  const idsWithDates = db
+    .select({
+      id: soloMatches.id,
+      date: soloMatches.date,
+    })
+    .from(soloMatches)
+    .where(
+      or(eq(soloMatches.player0, user.id), eq(soloMatches.player1, user.id)),
+    )
+    .union(
+      db
+        .select({
+          id: duoMatches.id,
+          date: duoMatches.date,
+        })
+        .from(duoMatches)
+        .where(
+          or(
+            eq(duoMatches.player0, user.id),
+            eq(duoMatches.player1, user.id),
+            eq(duoMatches.player2, user.id),
+            eq(duoMatches.player3, user.id),
+          ),
+        ),
+    )
+    .orderBy(desc(soloMatches.date))
+    .offset(cursor)
+    .limit(pageLength)
+    .as("idsWithDates");
+
+  const ids = db.select({ id: idsWithDates.id }).from(idsWithDates);
+
+  const [solos, duos] = await Promise.all([
+    db.query.soloMatches.findMany({
+      where: inArray(soloMatches.id, ids),
+      columns: {
+        id: true,
+        date: true,
+        score0: true,
+        score1: true,
+        draft: true,
+        mu0Change: true,
+        mu1Change: true,
+      },
+      with: { player0: true, player1: true },
+    }),
+    db.query.duoMatches.findMany({
+      where: inArray(duoMatches.id, ids),
+      columns: {
+        id: true,
+        date: true,
+        score0: true,
+        score1: true,
+        draft: true,
+        mu0Change: true,
+        mu1Change: true,
+        player0: true,
+        player1: true,
+        player2: true,
+        player3: true,
+      },
+      with: { team0: true, team1: true },
+    }),
+  ]);
+
+  const solosTagged = solos.map((solo) => ({
+    type: "solo" as const,
+    match: solo,
+  }));
+
+  const duosTagged = duos.map((duo) => ({
+    type: "duo" as const,
+    match: duo,
+  }));
+
+  return [...duosTagged, ...solosTagged].sort(
+    (a, b) => b.match.date.getTime() - a.match.date.getTime(),
+  );
+}
+
+//DEPRECATED
 export async function getSoloMatches(cursor: number, pageLength = 10) {
   const { user } = await getSession();
 
@@ -271,6 +394,33 @@ export async function getSoloMatches(cursor: number, pageLength = 10) {
     },
     orderBy: [desc(soloMatches.date)],
     with: { player0: true, player1: true },
+    offset: cursor,
+    limit: pageLength,
+  });
+}
+
+//DEPRECATED
+export async function getDuoMatches(cursor: number, pageLength = 10) {
+  const { user } = await getSession();
+
+  return await db.query.duoMatches.findMany({
+    where: or(
+      eq(duoMatches.player0, user.id),
+      eq(duoMatches.player1, user.id),
+      eq(duoMatches.player2, user.id),
+      eq(duoMatches.player3, user.id),
+    ),
+    columns: {
+      id: true,
+      date: true,
+      score0: true,
+      score1: true,
+      draft: true,
+      mu0Change: true,
+      mu1Change: true,
+    },
+    orderBy: [desc(duoMatches.date)],
+    with: { team0: true, team1: true },
     offset: cursor,
     limit: pageLength,
   });
@@ -510,10 +660,13 @@ async function updateDuoGameRating(id: string) {
       .where(
         and(eq(duo.user0, loserTeam.user0), eq(duo.user1, loserTeam.user1)),
       );
-    await tx.update(duoMatches).set({
-      draft: false,
-      mu0Change: newWinnerRating.mu - winnerTeam.skillMu,
-      mu1Change: newLoserRating.mu - loserTeam.skillMu,
-    });
+    await tx
+      .update(duoMatches)
+      .set({
+        draft: false,
+        mu0Change: newWinnerRating.mu - winnerTeam.skillMu,
+        mu1Change: newLoserRating.mu - loserTeam.skillMu,
+      })
+      .where(eq(duoMatches.id, id));
   });
 }

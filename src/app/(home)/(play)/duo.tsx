@@ -8,20 +8,21 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Separator } from "@kicka/components/ui/separator";
 import { User } from "./user";
 import UserSelect from "./user-select";
-import { draftDuoGame, draftSoloGame } from "@kicka/actions";
+import { draftDuoGame } from "@kicka/actions";
 import { drawerAtom } from "@kicka/lib/global-state";
 import { useAtom } from "jotai";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TeamName from "./team-name";
+import OpponentTeamName from "./opponent-team-name";
+import OwnTeamName from "./own-team-name";
 
 const formSchema = z.object({
   teamName: z.string(),
+  user1: z.string(),
   user2: z.string(),
   user3: z.string(),
-  user4: z.string(),
   score1: z.number().int().min(0).max(MAX_SCORE),
   score2: z.number().int().min(0).max(MAX_SCORE),
 });
@@ -39,13 +40,13 @@ export default function Single() {
       teamName: "",
       score1: 0,
       score2: 0,
+      user1: "",
       user2: "",
       user3: "",
-      user4: "",
     },
   });
 
-  const { handleSubmit, control, setError } = methods;
+  const { handleSubmit, control, setError, getValues, setValue } = methods;
 
   const { mutate, status } = useMutation({
     mutationFn: draftDuoGame,
@@ -57,17 +58,16 @@ export default function Single() {
           setOpen(false);
       } else {
         setError("root", { message: res.message });
-        console.log(res.message);
       }
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
     mutate({
-      teamName: "test",
+      teamName: data.teamName,
       myScore: data.score1,
       opponentScore: data.score2,
-      partner: data.user2,
+      partner: data.user1,
       opponent1: data.user2,
       opponent2: data.user3,
     });
@@ -77,11 +77,11 @@ export default function Single() {
     <FormProvider {...methods}>
       <form className="flex flex-col gap-3" onSubmit={onSubmit}>
         <div className="flex flex-row gap-2">
-          <TeamName control={control} name="teamName" />
+          <OpponentTeamName />
         </div>
         <div className="flex flex-row gap-2">
+          <UserSelect control={control} name="user2" />
           <UserSelect control={control} name="user3" />
-          <UserSelect control={control} name="user4" />
         </div>
         <div className="flex flex-col items-center gap-4">
           <NumberInput control={control} name="score2" />
@@ -94,10 +94,10 @@ export default function Single() {
         </div>
         <div className="flex flex-row gap-2">
           <User />
-          <UserSelect control={control} name="user2" />
+          <UserSelect control={control} name="user1" />
         </div>
         <div className="flex flex-row gap-2">
-          <TeamName control={control} name="teamName" />
+          <OwnTeamName control={control} name="teamName" />
         </div>
         <div className="mt-4 flex flex-col gap-2">
           {status === "pending" ? (

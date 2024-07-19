@@ -7,14 +7,14 @@ import {
 import Hero from "./hero";
 import Matches from "./matches";
 import Play from "./(play)/play";
-import { getSoloMatches } from "@kicka/actions";
+import { getMatches } from "@kicka/actions";
 
 export default async function Dashboard() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["matches"],
-    queryFn: ({ pageParam }) => getSoloMatches(pageParam, 10),
+    queryFn: ({ pageParam }) => getMatches(pageParam, 10),
     initialPageParam: 0,
   });
 

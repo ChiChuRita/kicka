@@ -130,6 +130,14 @@ export const duoMatchesRelations = relations(duoMatches, ({ one }) => ({
     fields: [duoMatches.player3],
     references: [users.id],
   }),
+  team0: one(duo, {
+    fields: [duoMatches.player0, duoMatches.player1],
+    references: [duo.user0, duo.user1],
+  }),
+  team1: one(duo, {
+    fields: [duoMatches.player2, duoMatches.player3],
+    references: [duo.user0, duo.user1],
+  }),
 }));
 
 export type SoloMatch = typeof soloMatches.$inferSelect;

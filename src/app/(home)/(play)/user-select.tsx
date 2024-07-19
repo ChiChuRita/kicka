@@ -28,7 +28,7 @@ import {
 import { Button } from "@kicka/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
 import { User } from "@kicka/lib/db/schema";
-import { getAllOtherUsers, getAllOtherUsersExcept } from "@kicka/actions";
+import { getAllOtherUsers } from "@kicka/actions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FormSchema } from "./duo";
@@ -36,19 +36,19 @@ import { FormSchema } from "./duo";
 export default function UserSelect<FM extends FieldValues>(
   props: UseControllerProps<FM>,
 ) {
-  const { getValues } = useFormContext<FormSchema>();
+  const { watch } = useFormContext<FormSchema>();
   const { field } = useController(props);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<User>();
 
-  const allUsers = getValues();
+  const values = watch();
+  const users = [values.user1, values.user2, values.user3];
 
   const queryClient = useQueryClient();
 
   const { data } = useQuery({
-    queryKey: ["users", allUsers.user2, allUsers.user3, allUsers.user4],
-    queryFn: () =>
-      getAllOtherUsersExcept([allUsers.user2, allUsers.user3, allUsers.user4]),
+    queryKey: ["users"],
+    queryFn: () => getAllOtherUsers(),
   });
 
   return (
@@ -78,34 +78,33 @@ export default function UserSelect<FM extends FieldValues>(
           <CommandEmpty>No user found.</CommandEmpty>
           <CommandGroup>
             {data &&
-              data.map((user) => (
-                <CommandItem
-                  className="h-10"
-                  key={user.username}
-                  value={user.username}
-                  onSelect={async (currentValue) => {
-                    await queryClient.refetchQueries({
-                      queryKey: ["users"],
-                    });
-                    field.onChange(user.id);
-                    setValue(
-                      currentValue === value?.username.toLowerCase()
-                        ? undefined
-                        : data.find(
-                            (user) =>
-                              user.username.toLowerCase() === currentValue,
-                          ),
-                    );
-                    setOpen(false);
-                  }}
-                >
-                  <Avatar className="mr-2 h-6 w-6">
-                    <AvatarImage src={user.image} />
-                    <AvatarFallback>{user.username}</AvatarFallback>
-                  </Avatar>
-                  {user.username}
-                </CommandItem>
-              ))}
+              data.map((user) =>
+                users.includes(user.id) ? null : (
+                  <CommandItem
+                    className="h-10"
+                    key={user.username}
+                    value={user.username}
+                    onSelect={async (currentValue) => {
+                      field.onChange(user.id);
+                      setValue(
+                        currentValue === value?.username.toLowerCase()
+                          ? undefined
+                          : data.find(
+                              (user) =>
+                                user.username.toLowerCase() === currentValue,
+                            ),
+                      );
+                      setOpen(false);
+                    }}
+                  >
+                    <Avatar className="mr-2 h-6 w-6">
+                      <AvatarImage src={user.image} />
+                      <AvatarFallback>{user.username}</AvatarFallback>
+                    </Avatar>
+                    {user.username}
+                  </CommandItem>
+                ),
+              )}
           </CommandGroup>
         </Command>
       </PopoverContent>
