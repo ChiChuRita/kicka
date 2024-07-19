@@ -13,7 +13,8 @@ import {
 import Header from "@kicka/components/header";
 import Image from "next/image";
 import SoloRankings from "./solo";
-import { getSoloRanking } from "@kicka/actions";
+import { getDuoRanking, getSoloRanking } from "@kicka/actions";
+import DuoRankings from "./duo";
 
 export default async function Rankings() {
   const queryClient = new QueryClient();
@@ -21,6 +22,12 @@ export default async function Rankings() {
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["solo-ranking"],
     queryFn: ({ pageParam }) => getSoloRanking(pageParam, 20),
+    initialPageParam: 0,
+  });
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["duo-ranking"],
+    queryFn: ({ pageParam }) => getDuoRanking(pageParam, 20),
     initialPageParam: 0,
   });
 
@@ -54,7 +61,9 @@ export default async function Rankings() {
           <TabsContent value="solo">
             <SoloRankings />
           </TabsContent>
-          <TabsContent value="duo">Here are the duo rankings.</TabsContent>
+          <TabsContent value="duo">
+            <DuoRankings />
+          </TabsContent>
         </HydrationBoundary>
       </Tabs>
     </>

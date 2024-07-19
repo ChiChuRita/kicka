@@ -291,6 +291,24 @@ export const getSoloRanking = async (cursor: number, pageLength = 20) => {
   });
 };
 
+export type DuoRankingEntry = Awaited<ReturnType<typeof getDuoRanking>>[number];
+
+export const getDuoRanking = async (cursor: number, pageLength = 20) => {
+  return await db.query.duo.findMany({
+    columns: {
+      name: true,
+      user0: true,
+      user1: true,
+      skillMu: true,
+      games: true,
+      wins: true,
+    },
+    offset: cursor,
+    limit: pageLength,
+    orderBy: [desc(duo.skillMu)],
+  });
+};
+
 export async function getMatches(cursor: number, pageLength = 10) {
   const { user } = await getSession();
 

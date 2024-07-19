@@ -2,18 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-import SoloRankingEntry from "./solo-entry";
-import { getSoloRanking } from "@kicka/actions";
+import DuoRankingEntry from "./duo-entry";
+import { getDuoRanking } from "@kicka/actions";
 import { useInView } from "framer-motion";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const pageLength = 10;
 
-export default function SoloRankings() {
+export default function DuoRankings() {
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
-      queryKey: ["solo-ranking"],
-      queryFn: ({ pageParam }) => getSoloRanking(pageParam, pageLength),
+      queryKey: ["duo-ranking"],
+      queryFn: ({ pageParam }) => getDuoRanking(pageParam, pageLength),
       initialPageParam: 0,
       getNextPageParam: (lastPage, pages) => pages.length * pageLength,
     });
@@ -32,7 +32,11 @@ export default function SoloRankings() {
   return (
     <div className="flex flex-col gap-2">
       {entries?.map((entry, idx) => (
-        <SoloRankingEntry entry={entry} place={idx} key={entry.user.id} />
+        <DuoRankingEntry
+          entry={entry}
+          place={idx}
+          key={entry.user0 + entry.user1}
+        />
       ))}
       <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
     </div>
