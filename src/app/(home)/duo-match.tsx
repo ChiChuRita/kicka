@@ -20,7 +20,7 @@ interface GameProps {
     player1: User;
     player2: User;
     player3: User;
-    accept0: User;
+    accept0: boolean;
     accept1: boolean;
     accept2: boolean;
     accept3: boolean;

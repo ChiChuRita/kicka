@@ -35,7 +35,7 @@ export default function DuoRankings() {
         <DuoRankingEntry
           entry={entry}
           place={idx}
-          key={entry.user0 + entry.user1}
+          key={entry.user0.username + entry.user1.username}
         />
       ))}
       <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
