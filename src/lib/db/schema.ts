@@ -65,6 +65,8 @@ export const soloRelations = relations(solo, ({ one }) => ({
 
 export type DuoMatch = typeof duo.$inferSelect;
 
+export type Duo = typeof duo.$inferSelect;
+
 export const duo = pgTable(
   "duo",
   {

@@ -8,7 +8,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import SoloMatch from "./solo-match";
 import DuoMatch from "./duo-match";
-import { Card } from "@kicka/components/ui/card";
 
 const pageLength = 10;
 
@@ -39,9 +38,9 @@ export default function Matches() {
       <div className="flex flex-col gap-2">
         {matches?.map((match) =>
           match.type == "solo" ? (
-            <SoloMatch key={Math.random()} match={match.match} />
+            <SoloMatch key={match.match.id} match={match.match} />
           ) : (
-            <DuoMatch key={Math.random()} match={match.match} />
+            <DuoMatch key={match.match.id} match={match.match} />
           ),
         )}
         <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>

@@ -10,9 +10,20 @@ import { acceptSoloGame } from "@kicka/actions";
 import { Button } from "@kicka/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
+import { User } from "@kicka/lib/db/schema";
 
 interface GameProps {
-  match: any;
+  match: {
+    id: string;
+    date: Date;
+    score0: number;
+    score1: number;
+    draft: boolean;
+    mu0Change: number;
+    mu1Change: number;
+    player0: User;
+    player1: User;
+  };
 }
 
 export default function SoloMatch({ match }: GameProps) {

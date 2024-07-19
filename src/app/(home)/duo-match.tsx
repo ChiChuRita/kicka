@@ -6,9 +6,28 @@ import { acceptDuoGame } from "@kicka/actions";
 import { Button } from "@kicka/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
+import { Duo } from "@kicka/lib/db/schema";
 
 interface GameProps {
-  match: any;
+  match: {
+    id: string;
+    date: Date;
+    player0: string;
+    player1: string;
+    player2: string;
+    player3: string;
+    accept0: boolean;
+    accept1: boolean;
+    accept2: boolean;
+    accept3: boolean;
+    score0: number;
+    score1: number;
+    draft: boolean;
+    mu0Change: number;
+    mu1Change: number;
+    team0: Duo;
+    team1: Duo;
+  };
 }
 
 export default function DuoMatch({ match }: GameProps) {
@@ -27,6 +46,16 @@ export default function DuoMatch({ match }: GameProps) {
       console.log(error);
     },
   });
+
+  const players = [match.player0, match.player1, match.player2, match.player3];
+  const acceptance = [
+    match.accept0,
+    match.accept1,
+    match.accept2,
+    match.accept3,
+  ];
+  const myIndex = data ? players.indexOf(data.user.id) : -1;
+  const myAcceptance = acceptance[myIndex];
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
@@ -56,7 +85,7 @@ export default function DuoMatch({ match }: GameProps) {
         <div className="flex flex-row items-center justify-between gap-2">
           <span>Draft</span>
           <div className="flex flex-row gap-2">
-            {data && data.user.id != match.team0.user0 && (
+            {data && !myAcceptance && (
               <Button
                 onClick={() => mutate({ accept: true, id: match.id })}
                 variant="secondary"
