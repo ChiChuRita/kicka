@@ -297,11 +297,13 @@ export const getDuoRanking = async (cursor: number, pageLength = 20) => {
   return await db.query.duo.findMany({
     columns: {
       name: true,
-      user0: true,
-      user1: true,
       skillMu: true,
       games: true,
       wins: true,
+    },
+    with: {
+      user0: true,
+      user1: true,
     },
     offset: cursor,
     limit: pageLength,
@@ -368,16 +370,19 @@ export async function getMatches(cursor: number, pageLength = 10) {
         draft: true,
         mu0Change: true,
         mu1Change: true,
-        player0: true,
-        player1: true,
-        player2: true,
-        player3: true,
         accept0: true,
         accept1: true,
         accept2: true,
         accept3: true,
       },
-      with: { team0: true, team1: true },
+      with: {
+        player0: true,
+        player1: true,
+        player2: true,
+        player3: true,
+        team0: true,
+        team1: true,
+      },
     }),
   ]);
 

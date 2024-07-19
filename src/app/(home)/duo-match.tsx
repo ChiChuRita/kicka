@@ -1,22 +1,26 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@kicka/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@kicka/components/ui/avatar";
 import { acceptDuoGame } from "@kicka/actions";
 
 import { Button } from "@kicka/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
-import { Duo } from "@kicka/lib/db/schema";
+import { Duo, User } from "@kicka/lib/db/schema";
 
 interface GameProps {
   match: {
     id: string;
     date: Date;
-    player0: string;
-    player1: string;
-    player2: string;
-    player3: string;
-    accept0: boolean;
+    player0: User;
+    player1: User;
+    player2: User;
+    player3: User;
+    accept0: User;
     accept1: boolean;
     accept2: boolean;
     accept3: boolean;
@@ -47,7 +51,13 @@ export default function DuoMatch({ match }: GameProps) {
     },
   });
 
-  const players = [match.player0, match.player1, match.player2, match.player3];
+  //quick and dirty
+  const players = [
+    match.player0.id,
+    match.player1.id,
+    match.player2.id,
+    match.player3.id,
+  ];
   const acceptance = [
     match.accept0,
     match.accept1,
@@ -60,11 +70,16 @@ export default function DuoMatch({ match }: GameProps) {
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
       <div className="flex flex-row items-center justify-between">
-        <Avatar className="mr-2 h-8 w-8">
-          {/* <AvatarImage src={match.player0.image} /> */}
-          <AvatarFallback>{match.team0.name}</AvatarFallback>
-        </Avatar>
-        {/* {match.team0.name} */}
+        <div className="flex flex-row items-center justify-between">
+          <Avatar className="mr-2 h-8 w-8">
+            <AvatarImage src={match.player0.image} />
+            <AvatarFallback>{match.player0.username[0]}</AvatarFallback>
+          </Avatar>
+          <Avatar className="mr-2 h-8 w-8">
+            <AvatarImage src={match.player1.image} />
+            <AvatarFallback>{match.player1.username[0]}</AvatarFallback>
+          </Avatar>
+        </div>
         <div className="flex flex-row items-center justify-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded border">
             {match.score0}
@@ -75,10 +90,13 @@ export default function DuoMatch({ match }: GameProps) {
         </div>
         <div className="flex flex-row items-center justify-between">
           <Avatar className="mr-2 h-8 w-8">
-            {/* <AvatarImage src={match.player1.image} /> */}
-            <AvatarFallback>{match.team1.name}</AvatarFallback>
+            <AvatarImage src={match.player2.image} />
+            <AvatarFallback>{match.player2.username[0]}</AvatarFallback>
           </Avatar>
-          {/* {match.team1.name} */}
+          <Avatar className="mr-2 h-8 w-8">
+            <AvatarImage src={match.player3.image} />
+            <AvatarFallback>{match.player3.username[0]}</AvatarFallback>
+          </Avatar>
         </div>
       </div>
       {match.draft && (

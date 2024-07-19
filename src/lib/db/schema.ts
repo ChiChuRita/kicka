@@ -87,6 +87,17 @@ export const duo = pgTable(
   }),
 );
 
+export const duoRelations = relations(duo, ({ one }) => ({
+  user0: one(users, {
+    fields: [duo.user0],
+    references: [users.id],
+  }),
+  user1: one(users, {
+    fields: [duo.user1],
+    references: [users.id],
+  }),
+}));
+
 export const duoMatches = pgTable("duo_matches", {
   id: text("id")
     .primaryKey()
