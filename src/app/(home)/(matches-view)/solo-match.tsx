@@ -34,7 +34,7 @@ export default function SoloMatch({ match }: GameProps) {
 
   const { mutate, status } = useMutation({
     mutationFn: acceptSoloGame,
-    onSuccess: async (data) => {
+    onMutate: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: ["matches"],
       });

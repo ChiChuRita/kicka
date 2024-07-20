@@ -42,7 +42,7 @@ export default function DuoMatch({ match }: GameProps) {
 
   const { mutate, status } = useMutation({
     mutationFn: acceptDuoGame,
-    onSuccess: async (data) => {
+    onMutate: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: ["matches"],
       });
