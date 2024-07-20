@@ -17,7 +17,7 @@ export default function Info() {
       <CardContent className="flex flex-col gap-2">
         <div className="flex flex-col">
           <span className="text-muted-foreground">Version</span>
-          <span>0.0.0-alpha</span>
+          <span>0.1.1</span>
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground">Feedback</span>
