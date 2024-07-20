@@ -1,4 +1,4 @@
-## Welcome to Kicka: The Table Football Matchmaking Web Application
+## Welcome to Kicka: The Table Football Matchmaking Platform
 
 Kicka is a matchmaking web application designed to rank the best table football players. Whether you're a seasoned player or just starting out, Kicka provides a platform for competitive matches and accurate skill assessment.
 
