@@ -50,7 +50,7 @@ export default function Single() {
     mutationFn: draftSoloGame,
     onSuccess: async (res) => {
       if (res.ok) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["matches"],
         });
         toast("Game drafted", {
@@ -59,7 +59,6 @@ export default function Single() {
         setOpen(false);
       } else {
         setError("root", { message: res.message });
-        console.log(res.message);
       }
     },
   });

@@ -17,6 +17,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import OpponentTeamName from "./opponent-team-name";
 import OwnTeamName from "./own-team-name";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   teamName: z.string(),
@@ -52,10 +53,13 @@ export default function Single() {
     mutationFn: draftDuoGame,
     onSuccess: async (res) => {
       if (res.ok) {
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["matches"],
-        }),
-          setOpen(false);
+        });
+        toast("Game drafted", {
+          description: "Now the other players have to accept the results!",
+        });
+        setOpen(false);
       } else {
         setError("root", { message: res.message });
       }
