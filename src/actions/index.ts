@@ -14,7 +14,6 @@ import { and, desc, eq, ilike, ne, or, inArray } from "drizzle-orm";
 import { MAX_SCORE } from "@kicka/lib/constants";
 import { db } from "@kicka/lib/db";
 import { getSession } from "@kicka/actions/auth";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export async function getOwnTeamName(user1?: string) {
@@ -494,10 +493,9 @@ export async function acceptSoloGame(args: AcceptSoloGameArgs) {
     }
 
     await updateSoloGameRating(args.id);
-    revalidatePath("/");
   } catch (error) {
     await db.delete(duoMatches).where(eq(duoMatches.id, args.id));
-    revalidatePath("/");
+
     if (error instanceof Error) {
       console.error(error.message);
       return { ok: false, message: error.message + "... deleting draft" };
@@ -616,11 +614,11 @@ export async function acceptDuoGame(args: AcceptDuoGameArgs) {
     }
 
     await updateDuoGameRating(args.id);
-    revalidatePath("/");
+
     return { ok: true };
   } catch (error) {
     await db.delete(duoMatches).where(eq(duoMatches.id, args.id));
-    revalidatePath("/");
+
     if (error instanceof Error) {
       console.error(error.message);
       return { ok: false, message: error.message + "... deleting draft" };
