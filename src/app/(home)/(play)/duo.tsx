@@ -117,6 +117,9 @@ export default function Single() {
               Cancel
             </Button>
           </DrawerClose>
+          <span className="text-sm text-red-500">
+            {methods.formState.errors.root?.message}
+          </span>
         </div>
       </form>
     </FormProvider>

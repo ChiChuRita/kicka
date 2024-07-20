@@ -6,6 +6,7 @@ import DuoRankingEntry from "./duo-entry";
 import { getDuoRanking } from "@kicka/actions";
 import { useInView } from "framer-motion";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const pageLength = 10;
 
@@ -38,7 +39,17 @@ export default function DuoRankings() {
           key={entry.user0.username + entry.user1.username}
         />
       ))}
-      <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
+      <span
+        ref={lastEntryRef}
+        className="flex flex-row items-center justify-center"
+      >
+        {isFetchingNextPage && (
+          <>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Loading...
+          </>
+        )}
+      </span>
     </div>
   );
 }
