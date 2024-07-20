@@ -21,5 +21,12 @@ export default function OpponentTeamName() {
     refetch();
   }, [user2, user3, refetch]);
 
-  return <Input type="text" value={data || ""} readOnly />;
+  return (
+    <Input
+      type="text"
+      value={data || ""}
+      readOnly
+      placeholder="Opponent Teamname"
+    />
+  );
 }

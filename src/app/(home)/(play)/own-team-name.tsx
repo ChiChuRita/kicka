@@ -30,5 +30,5 @@ export default function OwnTeamName<FM extends FieldValues>(
     }
   }, [user1, data, setValue]);
 
-  return <Input type="text" {...field} />;
+  return <Input type="text" {...field} placeholder="Own Teamname" />;
 }
