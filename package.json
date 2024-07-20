@@ -1,6 +1,6 @@
 {
   "name": "kicka",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
@@ -11,6 +11,7 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@changesets/cli": "^2.27.7",
     "@hookform/resolvers": "^3.9.0",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@radix-ui/react-alert-dialog": "^1.1.1",
