@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 
 import Hero from "./hero";
-import Matches from "./matches-view/matches";
+import Matches from "./(matches-view)/matches";
 import Play from "./(play)/play";
 import { getMatches } from "@kicka/actions";
 
