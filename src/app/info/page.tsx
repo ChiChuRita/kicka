@@ -12,22 +12,17 @@ export default async function InfoPage() {
             ranking can be reset at any time!
           </li>
           <li>
-            Once the game is released, the ranking will be reseted for the last
-            time. From that point on, the ranking will be permanent.
+            Once the first stable version is released, the ranking will be
+            permanent.
           </li>
-        </ul>
-      </div>
-      <div className="flex flex-col">
-        <h4>Things working</h4>
-        <ul className="flex flex-col ">
-          <li>None 🤷‍♂️</li>
         </ul>
       </div>
       <div className="flex flex-col">
         <h4>Things still missing</h4>
         <ul className="flex flex-col">
-          <li>Duo 🤝</li>
-          <li>Ranking for Duo 🏆</li>
+          <li>Detail Views</li>
+          <li>Game Rules</li>
+          <li>Fancy Icons</li>
           <li>Fancy Animations 🧑‍🎨</li>
         </ul>
       </div>
@@ -36,6 +31,10 @@ export default async function InfoPage() {
         <ul className="flex flex-col">
           <li>
             You need at least 3 games to be ranked in the respected game mode.
+          </li>
+          <li>
+            You need to play at least 1 game every 30 days to be visible in the
+            ranking leaderboard.
           </li>
           <li>
             Solo Player ranking is a skill number that reflects you personal
