@@ -8,6 +8,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import SoloMatch from "./solo-match";
 import DuoMatch from "./duo-match";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const pageLength = 10;
 
@@ -18,7 +19,7 @@ export default function Matches() {
       queryFn: ({ pageParam }) => getMatches(pageParam, pageLength),
       initialPageParam: 0,
       getNextPageParam: (lastPage, pages) => pages.length * pageLength,
-      refetchInterval: 15_000,
+      refetchInterval: 5_000,
     });
 
   const matches = data?.pages.flatMap((page) => page);
@@ -43,7 +44,17 @@ export default function Matches() {
             <DuoMatch key={match.match.id} match={match.match} />
           ),
         )}
-        <span ref={lastEntryRef}>{isFetchingNextPage && "Loading..."}</span>
+        <span
+          ref={lastEntryRef}
+          className="flex flex-row items-center justify-center"
+        >
+          {isFetchingNextPage && (
+            <>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Loading...
+            </>
+          )}
+        </span>
       </div>
     </div>
   );
