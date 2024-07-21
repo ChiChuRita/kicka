@@ -31,7 +31,7 @@ export default async function RootLayout({
         )}
       >
         <Providers>
-          <main className="container mb-20 flex max-w-2xl grow flex-col gap-5 p-5">
+          <main className="container mb-20 flex max-w-2xl grow flex-col gap-3 p-3">
             {children}
           </main>
           <Navbar />
