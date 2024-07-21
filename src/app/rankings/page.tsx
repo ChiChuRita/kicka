@@ -15,6 +15,11 @@ import Image from "next/image";
 import SoloRankings from "./solo";
 import { getDuoRanking, getSoloRanking } from "@kicka/actions";
 import DuoRankings from "./duo";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@kicka/components/ui/carousel";
 
 export default async function Rankings() {
   const queryClient = new QueryClient();
@@ -58,12 +63,20 @@ export default async function Rankings() {
           </TabsTrigger>
         </TabsList>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <TabsContent value="solo">
-            <SoloRankings />
-          </TabsContent>
-          <TabsContent value="duo">
-            <DuoRankings />
-          </TabsContent>
+          <Carousel>
+            <CarouselContent>
+              <CarouselItem>
+                <TabsContent value="solo">
+                  <SoloRankings />
+                </TabsContent>
+              </CarouselItem>
+              <CarouselItem>
+                <TabsContent value="duo">
+                  <DuoRankings />
+                </TabsContent>
+              </CarouselItem>
+            </CarouselContent>
+          </Carousel>
         </HydrationBoundary>
       </Tabs>
     </>

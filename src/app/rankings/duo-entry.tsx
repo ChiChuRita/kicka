@@ -11,7 +11,7 @@ interface DuoRankingsProps {
 export default function DuoRankingEntry({ place, entry }: DuoRankingsProps) {
   return (
     <div className="flex flex-row justify-between rounded-md border p-3">
-      <div className="flex flex-row items-center">
+      <div className="flex max-w-full flex-row items-center truncate">
         <div className="flex flex-row items-center justify-between">
           <Avatar className="mr-2 h-6 w-6">
             <AvatarImage src={entry.user0.image} />
@@ -25,8 +25,8 @@ export default function DuoRankingEntry({ place, entry }: DuoRankingsProps) {
         <span>{entry.name}</span>
       </div>
       <div className="flex flex-row gap-2">
-        Skill: <span>{Math.round(entry.skillMu)}</span>
-        Wins: <span>{entry.wins}</span>
+        <span>{Math.round(entry.rating)}</span>
+        <span>{entry.wins}</span>
       </div>
     </div>
   );
