@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { db } from "@kicka/lib/db";
 import { eq } from "drizzle-orm";
 import { generateId } from "lucia";
-import { initialSoloRating } from "@kicka/lib/skill";
+import { SoloRater } from "@kicka/lib/skill";
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -75,7 +75,7 @@ export async function GET(request: Request): Promise<Response> {
       image: githubUser.avatar_url,
     });
 
-    const initalRating = initialSoloRating();
+    const initalRating = SoloRater.create();
     await db.insert(solo).values({
       user: userId,
       skillMu: initalRating.mu,
