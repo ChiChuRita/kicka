@@ -1,6 +1,6 @@
 "use server";
 
-import { KickaRating, initialTeamRating, rate } from "@kicka/lib/skill";
+import { SoloRater, DuoRater, TeamRater } from "@kicka/lib/skill";
 import {
   duo,
   duoMatches,
@@ -152,7 +152,7 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
       ),
     });
 
-    const initial = initialTeamRating();
+    const initial = TeamRater.create();
 
     if (!team0) {
       await db.insert(duo).values({
@@ -527,10 +527,10 @@ async function updateSoloGameRating(id: string) {
     const winner = match.score0 > match.score1 ? player0 : player1;
     const loser = match.score0 > match.score1 ? player1 : player0;
 
-    const winnerRating = new KickaRating(winner.skillMu, winner.skillSigma);
-    const loserRating = new KickaRating(loser.skillMu, loser.skillSigma);
+    const winnerRating = SoloRater.create(winner.skillMu, winner.skillSigma);
+    const loserRating = SoloRater.create(loser.skillMu, loser.skillSigma);
 
-    const { newWinnerRating, newLoserRating } = rate({
+    const { newWinnerRating, newLoserRating } = SoloRater.rate({
       winnerRating,
       loserRating,
     });
@@ -651,15 +651,15 @@ async function updateDuoGameRating(id: string) {
     const winnerTeam = match.score0 > match.score1 ? team0 : team1;
     const loserTeam = match.score0 > match.score1 ? team1 : team0;
 
-    const winnerRating = new KickaRating(
+    const winnerRating = TeamRater.create(
       winnerTeam.skillMu,
       winnerTeam.skillSigma,
     );
-    const loserRating = new KickaRating(
+    const loserRating = TeamRater.create(
       loserTeam.skillMu,
       loserTeam.skillSigma,
     );
-    const { newWinnerRating, newLoserRating } = rate({
+    const { newWinnerRating, newLoserRating } = TeamRater.rate({
       winnerRating,
       loserRating,
     });

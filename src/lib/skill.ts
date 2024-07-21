@@ -1,63 +1,108 @@
-import { Rating, rate_1vs1, rate as rater } from "ts-trueskill";
-import { INITIAL_RATING_MU, INITIAL_RATING_SIGMA } from "./constants";
+import { Rating, TrueSkill, rate_1vs1 } from "ts-trueskill";
+import {
+  INITIAL_DUO_RATING_MU,
+  INITIAL_DUO_RATING_SIGMA,
+  INITIAL_SOLO_RATING_MU,
+  INITIAL_TEAM_RATING_MU,
+  INITIAL_TEAM_RATING_SIGMA,
+} from "./constants";
 
-export class KickaRating {
-  constructor(
-    public mu: number,
-    public sigma: number,
-  ) {}
+export class SoloRater {
+  static rater = new TrueSkill(
+    INITIAL_SOLO_RATING_MU,
+    INITIAL_DUO_RATING_SIGMA,
+    undefined,
+    undefined,
+    0,
+  );
 
-  static fromRating(rating: Rating) {
-    return new KickaRating(rating.mu, rating.sigma);
+  static rate(args: { winnerRating: Rating; loserRating: Rating }) {
+    const [newWinner, newLoser] = rate_1vs1(
+      args.winnerRating,
+      args.loserRating,
+      false,
+      undefined,
+      this.rater,
+    );
+    return {
+      newWinnerRating: newWinner,
+      newLoserRating: newLoser,
+    };
   }
 
-  toRating() {
-    return new Rating(this.mu, this.sigma);
+  static create(mu?: number, sigma?: number) {
+    return this.rater.createRating(mu, sigma);
+  }
+
+  static expose(rating: Rating) {
+    return this.rater.expose(rating);
   }
 }
 
-export function rate(args: {
-  winnerRating: KickaRating;
-  loserRating: KickaRating;
-}) {
-  const [newWinner, newLoser] = rate_1vs1(
-    args.winnerRating.toRating(),
-    args.loserRating.toRating(),
+export class TeamRater {
+  static rater = new TrueSkill(
+    INITIAL_TEAM_RATING_MU,
+    INITIAL_TEAM_RATING_SIGMA,
+    undefined,
+    undefined,
+    0,
   );
-  return {
-    newWinnerRating: KickaRating.fromRating(newWinner),
-    newLoserRating: KickaRating.fromRating(newLoser),
-  };
+
+  static rate(args: { winnerRating: Rating; loserRating: Rating }) {
+    const [newWinner, newLoser] = rate_1vs1(
+      args.winnerRating,
+      args.loserRating,
+      false,
+      undefined,
+      this.rater,
+    );
+    return {
+      newWinnerRating: newWinner,
+      newLoserRating: newLoser,
+    };
+  }
+
+  static create(mu?: number, sigma?: number) {
+    return this.rater.createRating(mu, sigma);
+  }
+
+  static expose(rating: Rating) {
+    return this.rater.expose(rating);
+  }
 }
 
-//TO BE TESTED
-export function rateDuoPlayer(args: {
-  winner0Rating: KickaRating;
-  winner1Rating: KickaRating;
-  loser0Rating: KickaRating;
-  loser1Rating: KickaRating;
-}) {
-  const [[newWinner0, newWinner1], [newLoser0, newLoser1]] = rater(
-    [args.winner0Rating.toRating(), args.winner1Rating.toRating()],
-    [args.loser0Rating.toRating(), args.loser1Rating.toRating()],
+export class DuoRater {
+  static rater = new TrueSkill(
+    INITIAL_DUO_RATING_MU,
+    INITIAL_DUO_RATING_SIGMA,
+    undefined,
+    undefined,
+    0,
   );
-  return {
-    newWinner0Rating: KickaRating.fromRating(newWinner0),
-    newWinner1Rating: KickaRating.fromRating(newWinner1),
-    newLoser0Rating: KickaRating.fromRating(newLoser0),
-    newLoser1Rating: KickaRating.fromRating(newLoser1),
-  };
-}
 
-export function initialSoloRating() {
-  return new KickaRating(INITIAL_RATING_MU, INITIAL_RATING_SIGMA);
-}
+  static rate(args: {
+    winner0Rating: Rating;
+    winner1Rating: Rating;
+    loser0Rating: Rating;
+    loser1Rating: Rating;
+  }) {
+    const [[newWinner0, newWinner1], [newLoser0, newLoser1]] = this.rater.rate([
+      [args.winner0Rating, args.winner1Rating],
+      [args.loser0Rating, args.loser1Rating],
+    ]);
+    return {
+      newWinner0Rating: newWinner0,
+      newWinner1Rating: newWinner1,
+      newLoser0Rating: newLoser0,
+      newLoser1Rating: newLoser1,
+    };
+  }
 
-export function initialTeamRating() {
-  return new KickaRating(INITIAL_RATING_MU, INITIAL_RATING_SIGMA);
-}
+  static create(mu?: number, sigma?: number) {
+    return this.rater.createRating(mu, sigma);
+  }
 
-//This rating is more for the flex
-export function initialDuoRating() {
-  return KickaRating.fromRating(new Rating());
+  static expose(rating: Rating) {
+    return this.rater.expose(rating);
+  }
 }
