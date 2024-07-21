@@ -63,20 +63,20 @@ export default async function Rankings() {
           </TabsTrigger>
         </TabsList>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Carousel>
-            <CarouselContent>
-              <CarouselItem>
-                <TabsContent value="solo">
-                  <SoloRankings />
-                </TabsContent>
-              </CarouselItem>
-              <CarouselItem>
-                <TabsContent value="duo">
-                  <DuoRankings />
-                </TabsContent>
-              </CarouselItem>
+          {/* <Carousel> */}
+          {/* <CarouselContent> */}
+          {/* <CarouselItem> */}
+          <TabsContent value="solo">
+            <SoloRankings />
+          </TabsContent>
+          {/* </CarouselItem> */}
+          {/* <CarouselItem> */}
+          <TabsContent value="duo">
+            <DuoRankings />
+          </TabsContent>
+          {/* </CarouselItem>
             </CarouselContent>
-          </Carousel>
+          </Carousel> */}
         </HydrationBoundary>
       </Tabs>
     </>
