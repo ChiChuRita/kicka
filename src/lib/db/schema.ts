@@ -52,6 +52,7 @@ export const solo = pgTable("solo", {
     .references(() => users.id, { onDelete: "cascade" }),
   skillMu: doublePrecision("skill_mu").notNull(),
   skillSigma: doublePrecision("skill_sigma").notNull(),
+  rating: doublePrecision("rating").notNull(),
   wins: integer("wins").default(0).notNull(),
   games: integer("games").default(0).notNull(),
 });
@@ -73,6 +74,7 @@ export const duo = pgTable(
     name: text("name").notNull().unique(),
     skillMu: doublePrecision("skill_mu").notNull(),
     skillSigma: doublePrecision("skill_sigma").notNull(),
+    rating: doublePrecision("rating").notNull(),
     wins: integer("wins").default(0).notNull(),
     games: integer("games").default(0).notNull(),
     user0: text("user_0")
@@ -81,6 +83,7 @@ export const duo = pgTable(
     user1: text("user_1")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
+    lastGameAt: timestamp("last_game_at").notNull(),
   },
   (t) => ({
     id: primaryKey({ name: "id", columns: [t.user0, t.user1] }),
@@ -122,8 +125,8 @@ export const duoMatches = pgTable("duo_matches", {
   accept1: boolean("accept_1").notNull().default(false),
   accept2: boolean("accept_2").notNull().default(false),
   accept3: boolean("accept_3").notNull().default(false),
-  mu0Change: doublePrecision("mu_0_change").default(0).notNull(),
-  mu1Change: doublePrecision("mu_1_change").default(0).notNull(),
+  rating0Change: doublePrecision("rating_0_change").default(0).notNull(),
+  rating1Change: doublePrecision("rating_1_change").default(0).notNull(),
 });
 
 export const duoMatchesRelations = relations(duoMatches, ({ one }) => ({
@@ -171,8 +174,8 @@ export const soloMatches = pgTable("solo_matches", {
   draft: boolean("draft").notNull().default(true),
   accept0: boolean("accept_0").notNull().default(false),
   accept1: boolean("accept_1").notNull().default(false),
-  mu0Change: doublePrecision("mu_0_change").default(0).notNull(),
-  mu1Change: doublePrecision("mu_1_change").default(0).notNull(),
+  rating0Change: doublePrecision("rating_0_change").default(0).notNull(),
+  rating1Change: doublePrecision("rating_1_change").default(0).notNull(),
 });
 
 export const soloMatchesRelations = relations(soloMatches, ({ one }) => ({

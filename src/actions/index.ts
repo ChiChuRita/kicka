@@ -161,12 +161,15 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
         user1: sortedMyPlayer1.id,
         skillMu: initial.mu,
         skillSigma: initial.sigma,
+        rating: TeamRater.expose(initial),
+        lastGameAt: new Date(),
       });
     } else {
       await db
         .update(duo)
         .set({
           name: args.teamName,
+          lastGameAt: new Date(),
         })
         .where(
           and(
@@ -186,7 +189,21 @@ export async function draftDuoGame(args: DraftDuoGameArgs) {
         user1: sortedOpponentPlayer1.id,
         skillMu: initial.mu,
         skillSigma: initial.sigma,
+        rating: TeamRater.expose(initial),
+        lastGameAt: new Date(),
       });
+    } else {
+      await db
+        .update(duo)
+        .set({
+          lastGameAt: new Date(),
+        })
+        .where(
+          and(
+            eq(duo.user0, sortedOpponentPlayer0.id),
+            eq(duo.user1, sortedOpponentPlayer1.id),
+          ),
+        );
     }
 
     const match = await db
@@ -277,7 +294,7 @@ export type SoloRankingEntry = Awaited<
 export const getSoloRanking = async (cursor: number, pageLength = 20) => {
   return await db.query.solo.findMany({
     columns: {
-      skillMu: true,
+      rating: true,
       games: true,
       wins: true,
     },
@@ -286,7 +303,7 @@ export const getSoloRanking = async (cursor: number, pageLength = 20) => {
     },
     offset: cursor,
     limit: pageLength,
-    orderBy: [desc(solo.skillMu)],
+    orderBy: [desc(solo.rating)],
   });
 };
 
@@ -296,7 +313,7 @@ export const getDuoRanking = async (cursor: number, pageLength = 20) => {
   return await db.query.duo.findMany({
     columns: {
       name: true,
-      skillMu: true,
+      rating: true,
       games: true,
       wins: true,
     },
@@ -306,7 +323,7 @@ export const getDuoRanking = async (cursor: number, pageLength = 20) => {
     },
     offset: cursor,
     limit: pageLength,
-    orderBy: [desc(duo.skillMu)],
+    orderBy: [desc(duo.rating)],
   });
 };
 
@@ -354,8 +371,8 @@ export async function getMatches(cursor: number, pageLength = 10) {
         score0: true,
         score1: true,
         draft: true,
-        mu0Change: true,
-        mu1Change: true,
+        rating0Change: true,
+        rating1Change: true,
       },
       with: { player0: true, player1: true },
     }),
@@ -367,8 +384,8 @@ export async function getMatches(cursor: number, pageLength = 10) {
         score0: true,
         score1: true,
         draft: true,
-        mu0Change: true,
-        mu1Change: true,
+        rating0Change: true,
+        rating1Change: true,
         accept0: true,
         accept1: true,
         accept2: true,
@@ -398,58 +415,6 @@ export async function getMatches(cursor: number, pageLength = 10) {
   return [...duosTagged, ...solosTagged].sort(
     (a, b) => b.match.date.getTime() - a.match.date.getTime(),
   );
-}
-
-//DEPRECATED
-export async function getSoloMatches(cursor: number, pageLength = 10) {
-  const { user } = await getSession();
-
-  return await db.query.soloMatches.findMany({
-    where: or(
-      eq(soloMatches.player1, user.id),
-      eq(soloMatches.player0, user.id),
-    ),
-    columns: {
-      id: true,
-      date: true,
-      score0: true,
-      score1: true,
-      draft: true,
-      mu0Change: true,
-      mu1Change: true,
-    },
-    orderBy: [desc(soloMatches.date)],
-    with: { player0: true, player1: true },
-    offset: cursor,
-    limit: pageLength,
-  });
-}
-
-//DEPRECATED
-export async function getDuoMatches(cursor: number, pageLength = 10) {
-  const { user } = await getSession();
-
-  return await db.query.duoMatches.findMany({
-    where: or(
-      eq(duoMatches.player0, user.id),
-      eq(duoMatches.player1, user.id),
-      eq(duoMatches.player2, user.id),
-      eq(duoMatches.player3, user.id),
-    ),
-    columns: {
-      id: true,
-      date: true,
-      score0: true,
-      score1: true,
-      draft: true,
-      mu0Change: true,
-      mu1Change: true,
-    },
-    orderBy: [desc(duoMatches.date)],
-    with: { team0: true, team1: true },
-    offset: cursor,
-    limit: pageLength,
-  });
 }
 
 const acceptSoloGameSchema = z.object({
@@ -540,6 +505,7 @@ async function updateSoloGameRating(id: string) {
       .set({
         skillMu: newWinnerRating.mu,
         skillSigma: newWinnerRating.sigma,
+        rating: SoloRater.expose(newWinnerRating),
         wins: winner.wins + 1,
         games: winner.games + 1,
       })
@@ -549,13 +515,14 @@ async function updateSoloGameRating(id: string) {
       .set({
         skillMu: newLoserRating.mu,
         skillSigma: newLoserRating.sigma,
+        rating: SoloRater.expose(newLoserRating),
         games: loser.games + 1,
       })
       .where(eq(solo.user, loser.user));
     await tx.update(soloMatches).set({
       draft: false,
-      mu0Change: newWinnerRating.mu - winner.skillMu,
-      mu1Change: newLoserRating.mu - loser.skillMu,
+      rating0Change: SoloRater.expose(newWinnerRating) - winner.rating,
+      rating1Change: SoloRater.expose(newLoserRating) - loser.rating,
     });
   });
 }
@@ -669,6 +636,7 @@ async function updateDuoGameRating(id: string) {
       .set({
         skillMu: newWinnerRating.mu,
         skillSigma: newWinnerRating.sigma,
+        rating: TeamRater.expose(newWinnerRating),
         wins: winnerTeam.wins + 1,
         games: winnerTeam.games + 1,
       })
@@ -680,6 +648,7 @@ async function updateDuoGameRating(id: string) {
       .set({
         skillMu: newLoserRating.mu,
         skillSigma: newLoserRating.sigma,
+        rating: TeamRater.expose(newLoserRating),
         games: loserTeam.games + 1,
       })
       .where(
@@ -689,8 +658,8 @@ async function updateDuoGameRating(id: string) {
       .update(duoMatches)
       .set({
         draft: false,
-        mu0Change: newWinnerRating.mu - winnerTeam.skillMu,
-        mu1Change: newLoserRating.mu - loserTeam.skillMu,
+        rating0Change: TeamRater.expose(newWinnerRating) - winnerTeam.rating,
+        rating1Change: TeamRater.expose(newLoserRating) - loserTeam.rating,
       })
       .where(eq(duoMatches.id, id));
   });

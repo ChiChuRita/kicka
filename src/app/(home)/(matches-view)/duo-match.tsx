@@ -28,8 +28,8 @@ interface GameProps {
     score0: number;
     score1: number;
     draft: boolean;
-    mu0Change: number;
-    mu1Change: number;
+    rating0Change: number;
+    rating1Change: number;
     team0: Duo;
     team1: Duo;
   };

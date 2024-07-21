@@ -80,6 +80,7 @@ export async function GET(request: Request): Promise<Response> {
       user: userId,
       skillMu: initalRating.mu,
       skillSigma: initalRating.sigma,
+      rating: SoloRater.expose(initalRating),
     });
 
     const session = await lucia.createSession(userId, {});

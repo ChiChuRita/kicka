@@ -20,8 +20,8 @@ interface GameProps {
     score0: number;
     score1: number;
     draft: boolean;
-    mu0Change: number;
-    mu1Change: number;
+    rating0Change: number;
+    rating1Change: number;
     player0: User;
     player1: User;
   };
