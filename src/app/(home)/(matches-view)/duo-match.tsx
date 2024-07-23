@@ -12,6 +12,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
 import { Duo, User } from "@kicka/lib/db/schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import clsx from "clsx";
 
 interface GameProps {
   match: {
@@ -72,11 +73,21 @@ export default function DuoMatch({ match }: GameProps) {
     <div className="flex flex-col gap-4 rounded-md border p-4">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-between">
-          <Avatar className="mr-2 h-6 w-6">
+          <Avatar
+            className={clsx(
+              "mr-2 h-6 w-6 border-2",
+              match.accept0 ? "border-green-400" : "border-red-400",
+            )}
+          >
             <AvatarImage src={match.player0.image} />
             <AvatarFallback>{match.player0.username[0]}</AvatarFallback>
           </Avatar>
-          <Avatar className="mr-2 h-6 w-6">
+          <Avatar
+            className={clsx(
+              "mr-2 h-6 w-6 border-2",
+              match.accept1 ? "border-green-400" : "border-red-400",
+            )}
+          >
             <AvatarImage src={match.player1.image} />
             <AvatarFallback>{match.player1.username[0]}</AvatarFallback>
           </Avatar>
@@ -90,11 +101,21 @@ export default function DuoMatch({ match }: GameProps) {
           </div>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Avatar className="mr-2 h-6 w-6">
+          <Avatar
+            className={clsx(
+              "mr-2 h-6 w-6 border-2",
+              match.accept2 ? "border-green-400" : "border-red-400",
+            )}
+          >
             <AvatarImage src={match.player2.image} />
             <AvatarFallback>{match.player2.username[0]}</AvatarFallback>
           </Avatar>
-          <Avatar className="mr-2 h-6 w-6">
+          <Avatar
+            className={clsx(
+              "mr-2 h-6 w-6 border-2",
+              match.accept3 ? "border-green-400" : "border-red-400",
+            )}
+          >
             <AvatarImage src={match.player3.image} />
             <AvatarFallback>{match.player3.username[0]}</AvatarFallback>
           </Avatar>
