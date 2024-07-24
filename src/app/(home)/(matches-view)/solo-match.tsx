@@ -12,8 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
 import { User } from "@kicka/lib/db/schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { matchesQueryOptions } from "./matches";
 import clsx from "clsx";
+import { matchesQueryOptions } from "../dashboard";
 
 interface GameProps {
   match: {
