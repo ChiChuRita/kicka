@@ -2,11 +2,23 @@ import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
+  infiniteQueryOptions,
 } from "@tanstack/react-query";
 
 import Hero from "./hero";
-import Matches, { matchesQueryOptions } from "./(matches-view)/matches";
+import Matches from "./(matches-view)/matches";
 import Play from "./(play)/play";
+import { getMatches } from "@kicka/actions";
+
+const pageLength = 10;
+
+export const matchesQueryOptions = infiniteQueryOptions({
+  queryKey: ["matches"],
+  queryFn: ({ pageParam }) => getMatches(pageParam, pageLength),
+  initialPageParam: 0,
+  getNextPageParam: (lastPage, pages) => pages.length * pageLength,
+  refetchInterval: 5_000,
+});
 
 export default async function Dashboard() {
   const queryClient = new QueryClient();

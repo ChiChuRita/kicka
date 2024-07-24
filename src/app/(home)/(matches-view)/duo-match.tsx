@@ -13,7 +13,7 @@ import { useSession } from "@kicka/lib/auth/useSession";
 import { Duo, User } from "@kicka/lib/db/schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import clsx from "clsx";
-import { matchesQueryOptions } from "./matches";
+import { matchesQueryOptions } from "../dashboard";
 
 interface GameProps {
   match: {

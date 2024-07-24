@@ -2,27 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
-import { getMatches } from "@kicka/actions";
 import { useInView } from "framer-motion";
-import {
-  infiniteQueryOptions,
-  queryOptions,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 
 import SoloMatch from "./solo-match";
 import DuoMatch from "./duo-match";
 import { ReloadIcon } from "@radix-ui/react-icons";
-
-const pageLength = 10;
-
-export const matchesQueryOptions = infiniteQueryOptions({
-  queryKey: ["matches"],
-  queryFn: ({ pageParam }) => getMatches(pageParam, pageLength),
-  initialPageParam: 0,
-  getNextPageParam: (lastPage, pages) => pages.length * pageLength,
-  refetchInterval: 5_000,
-});
+import { matchesQueryOptions } from "../dashboard";
 
 export default function Matches() {
   const { fetchNextPage, data, isFetching, isFetchingNextPage } =
