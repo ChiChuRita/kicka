@@ -12,6 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@kicka/lib/auth/useSession";
 import { User } from "@kicka/lib/db/schema";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { matchesQueryOptions } from "./matches";
+import clsx from "clsx";
 
 interface GameProps {
   match: {
@@ -34,20 +36,43 @@ export default function SoloMatch({ match }: GameProps) {
 
   const { mutate, status } = useMutation({
     mutationFn: acceptSoloGame,
-    onMutate: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["matches"],
+    onMutate: async (mutationData) => {
+      await queryClient.cancelQueries(matchesQueryOptions);
+
+      const previousMatches = queryClient.getQueryData(
+        matchesQueryOptions.queryKey,
+      );
+
+      queryClient.setQueryData(matchesQueryOptions.queryKey, (old) => {
+        if (!old) return;
+        const entries = old.pages.flatMap((page) => page);
+        let entry = entries.find((entry) => entry.match.id === mutationData.id);
+        if (entry?.type === "solo") entry.match.draft = false;
+        return old;
       });
+
+      return { previousMatches };
     },
     onError: (error) => {
       console.log(error);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["matches"],
+      });
     },
   });
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
       <div className="flex flex-row items-center justify-between">
-        <Avatar className="h-8 w-8">
+        <Avatar
+          className={clsx(
+            "mr-2 h-6 w-6 ",
+            match.draft && "border-2 border-green-400",
+          )}
+        >
           <AvatarImage src={match.player0.image} />
           <AvatarFallback>{match.player0.username[0]}</AvatarFallback>
         </Avatar>
@@ -61,7 +86,12 @@ export default function SoloMatch({ match }: GameProps) {
           </div>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Avatar className="mr-2 h-8 w-8">
+          <Avatar
+            className={clsx(
+              "mr-2 h-6 w-6",
+              match.draft && "border-2 border-red-400",
+            )}
+          >
             <AvatarImage src={match.player1.image} />
             <AvatarFallback>{match.player1.username[0]}</AvatarFallback>
           </Avatar>
