@@ -16,6 +16,18 @@ import { db } from "@kicka/lib/db";
 import { getSession } from "@kicka/actions/auth";
 import { z } from "zod";
 
+export async function getSoloMatch(matchID: string) {
+  return db.query.soloMatches.findFirst({
+    where: eq(soloMatches.id, matchID),
+  });
+}
+
+export async function getDuoMatch(matchID: string) {
+  return db.query.duoMatches.findFirst({
+    where: eq(duoMatches.id, matchID),
+  });
+}
+
 export async function getOwnTeamName(user1?: string) {
   const { user } = await getSession();
   const user0 = user.id;
