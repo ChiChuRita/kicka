@@ -18,32 +18,44 @@ class Team {
   ) {}
 
   static play(team0: Team, team1: Team) {
-    const performance0 = normal(team0.skill0, 20) + normal(team0.skill1, 20);
-    const performance1 = normal(team1.skill0, 20) + normal(team1.skill1, 20);
+    // Calculate total performance for each team
+    const getTeamPerformance = (team: Team) => 
+        normal(team.skill0, 20) + normal(team.skill1, 20);
+    
+    const performance0 = getTeamPerformance(team0);
+    const performance1 = getTeamPerformance(team1);
 
-    let loser = performance0 < performance1 ? team0 : team1;
-    let winner = performance0 < performance1 ? team1 : team0;
+    // Determine winner and loser based on performance
+    const [winner, loser] = performance0 > performance1 
+        ? [team0, team1] 
+        : [team1, team0];
 
+    // Update ratings
     const {
-      newWinner0Rating,
-      newWinner1Rating,
-      newLoser0Rating,
-      newLoser1Rating,
+        newWinner0Rating,
+        newWinner1Rating,
+        newLoser0Rating,
+        newLoser1Rating,
     } = DuoRater.rate({
-      winner0Rating: winner.rating0,
-      winner1Rating: winner.rating1,
-      loser0Rating: loser.rating0,
-      loser1Rating: loser.rating1,
+        winner0Rating: winner.rating0,
+        winner1Rating: winner.rating1,
+        loser0Rating: loser.rating0,
+        loser1Rating: loser.rating1,
     });
 
-    winner.rating0 = newWinner0Rating;
-    winner.rating1 = newWinner1Rating;
-    loser.rating0 = newLoser0Rating;
-    loser.rating1 = newLoser1Rating;
+    // Apply new ratings
+    Object.assign(winner, {
+        rating0: newWinner0Rating,
+        rating1: newWinner1Rating,
+        games: winner.games + 1,
+        wins: winner.wins + 1
+    });
 
-    winner.games++;
-    loser.games++;
-    winner.wins++;
+    Object.assign(loser, {
+        rating0: newLoser0Rating,
+        rating1: newLoser1Rating,
+        games: loser.games + 1
+    });
   }
 
   toString() {
@@ -64,3 +76,4 @@ console.log(
     .map((player) => player.toString())
     .join("\n"),
 );
+
