@@ -13,7 +13,7 @@ import {
 import Header from "@kicka/components/header";
 import Image from "next/image";
 import SoloRankings from "./solo";
-import { getDuoRanking, getSoloRanking } from "@kicka/actions";
+import { getTeamRanking, getSoloRanking } from "@kicka/actions";
 import DuoRankings from "./duo";
 import {
   Carousel,
@@ -32,7 +32,7 @@ export default async function Rankings() {
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["duo-ranking"],
-    queryFn: ({ pageParam }) => getDuoRanking(pageParam, 20),
+    queryFn: ({ pageParam }) => getTeamRanking(pageParam, 20),
     initialPageParam: 0,
   });
 
@@ -51,15 +51,15 @@ export default async function Rankings() {
             />
             Solo
           </TabsTrigger>
-          <TabsTrigger className="w-full" value="duo">
+          <TabsTrigger className="w-full" value="team">
             <Image
-              src="duo.svg"
+              src="team.svg"
               width={15}
               height={10}
-              alt="duo image"
+              alt="team image"
               className="mr-1"
             />
-            Duo
+            Team
           </TabsTrigger>
         </TabsList>
         <HydrationBoundary state={dehydrate(queryClient)}>
