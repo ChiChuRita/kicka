@@ -109,7 +109,7 @@ export default function SoloMatch({ match }: GameProps) {
           {match.draft && (
             <div className="flex flex-row items-center justify-between gap-2">
               <span>Draft</span>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2" onClick={(e) => e.stopPropagation()}>
                 {data && data.user.id != match.player0.id && (
                   <Button
                     onClick={() => mutate({ accept: true, id: match.id })}

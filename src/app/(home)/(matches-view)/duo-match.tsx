@@ -179,7 +179,7 @@ export default function DuoMatch({ match }: GameProps) {
           {match.draft && (
             <div className="flex flex-row items-center justify-between gap-2">
               <span>Draft</span>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2" onClick={(e) => e.stopPropagation()}>
                 {data && !myAcceptance && (
                   <Button
                     onClick={() => mutate({ accept: true, id: match.id })}
