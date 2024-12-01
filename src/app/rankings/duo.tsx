@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import DuoRankingEntry from "./duo-entry";
-import { getDuoRanking } from "@kicka/actions";
+import { getTeamRanking } from "@kicka/actions";
 import { useInView } from "framer-motion";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -14,7 +14,7 @@ export default function DuoRankings() {
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
       queryKey: ["duo-ranking"],
-      queryFn: ({ pageParam }) => getDuoRanking(pageParam, pageLength),
+      queryFn: ({ pageParam }) => getTeamRanking(pageParam, pageLength),
       initialPageParam: 0,
       getNextPageParam: (lastPage, pages) => pages.length * pageLength,
     });

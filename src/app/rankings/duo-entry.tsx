@@ -1,11 +1,11 @@
-import type { DuoRankingEntry } from "@kicka/actions";
+import type { TeamRankingEntry } from "@kicka/actions";
 import { Avatar, AvatarImage } from "@kicka/components/ui/avatar";
 import { AvatarFallback } from "@kicka/components/ui/avatar";
 import React from "react";
 
 interface DuoRankingsProps {
   place: number;
-  entry: DuoRankingEntry;
+  entry: TeamRankingEntry;
 }
 
 export default function DuoRankingEntry({ place, entry }: DuoRankingsProps) {

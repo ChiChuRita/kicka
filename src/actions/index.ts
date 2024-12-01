@@ -319,9 +319,20 @@ export const getSoloRanking = async (cursor: number, pageLength = 20) => {
   });
 };
 
-export type DuoRankingEntry = Awaited<ReturnType<typeof getDuoRanking>>[number];
-
 export const getDuoRanking = async (cursor: number, pageLength = 20) => {
+  return await db.query.duo.findMany({
+    columns: {
+      name: true,
+      rating: true,
+      games: true,
+      wins: true,
+    },
+  });
+};
+
+export type TeamRankingEntry = Awaited<ReturnType<typeof getTeamRanking>>[number];
+
+export const getTeamRanking = async (cursor: number, pageLength = 20) => {
   return await db.query.duo.findMany({
     columns: {
       name: true,
