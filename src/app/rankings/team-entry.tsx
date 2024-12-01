@@ -3,12 +3,12 @@ import { Avatar, AvatarImage } from "@kicka/components/ui/avatar";
 import { AvatarFallback } from "@kicka/components/ui/avatar";
 import React from "react";
 
-interface DuoRankingsProps {
+interface TeamRankingProps {
   place: number;
   entry: TeamRankingEntry;
 }
 
-export default function DuoRankingEntry({ place, entry }: DuoRankingsProps) {
+export default function TeamRankingEntry({ place, entry }: TeamRankingProps) {
   return (
     <div className="flex flex-row justify-between rounded-md border p-3">
       <div className="flex max-w-full flex-row items-center truncate">

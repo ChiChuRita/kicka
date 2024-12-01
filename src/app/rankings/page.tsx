@@ -14,7 +14,7 @@ import Header from "@kicka/components/header";
 import Image from "next/image";
 import SoloRankings from "./solo";
 import { getTeamRanking, getSoloRanking } from "@kicka/actions";
-import DuoRankings from "./duo";
+import TeamRankings from "./team";
 import {
   Carousel,
   CarouselContent,
@@ -71,8 +71,8 @@ export default async function Rankings() {
           </TabsContent>
           {/* </CarouselItem> */}
           {/* <CarouselItem> */}
-          <TabsContent value="duo">
-            <DuoRankings />
+          <TabsContent value="team">
+            <TeamRankings />
           </TabsContent>
           {/* </CarouselItem>
             </CarouselContent>

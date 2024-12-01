@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import DuoRankingEntry from "./duo-entry";
+import TeamRankingEntry from "./team-entry";
 import { getTeamRanking } from "@kicka/actions";
 import { useInView } from "framer-motion";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -10,10 +10,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 
 const pageLength = 10;
 
-export default function DuoRankings() {
+export default function TeamRankings() {
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
-      queryKey: ["duo-ranking"],
+      queryKey: ["team-ranking"],
       queryFn: ({ pageParam }) => getTeamRanking(pageParam, pageLength),
       initialPageParam: 0,
       getNextPageParam: (lastPage, pages) => pages.length * pageLength,
@@ -33,7 +33,7 @@ export default function DuoRankings() {
   return (
     <div className="flex flex-col gap-2">
       {entries?.map((entry, idx) => (
-        <DuoRankingEntry
+        <TeamRankingEntry
           entry={entry}
           place={idx}
           key={entry.user0.username + entry.user1.username}
