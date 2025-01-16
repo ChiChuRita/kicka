@@ -19,12 +19,32 @@ import { z } from "zod";
 export async function getSoloMatch(matchID: string) {
   return db.query.soloMatches.findFirst({
     where: eq(soloMatches.id, matchID),
+    with: {
+      player0: {
+        with: {
+          solo: true,
+        },
+      },
+      player1: {
+        with: {
+          solo: true,
+        },
+      },
+    },
   });
 }
 
 export async function getDuoMatch(matchID: string) {
   return db.query.duoMatches.findFirst({
     where: eq(duoMatches.id, matchID),
+    with: {
+      player0: true,
+      player1: true,
+      player2: true,
+      player3: true,
+      team0: true,
+      team1: true,
+    },
   });
 }
 
@@ -330,7 +350,9 @@ export const getDuoRanking = async (cursor: number, pageLength = 20) => {
   });
 };
 
-export type TeamRankingEntry = Awaited<ReturnType<typeof getTeamRanking>>[number];
+export type TeamRankingEntry = Awaited<
+  ReturnType<typeof getTeamRanking>
+>[number];
 
 export const getTeamRanking = async (cursor: number, pageLength = 20) => {
   return await db.query.duo.findMany({
